@@ -8,8 +8,7 @@ output: html_document
 ```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
 library(stats) # For linear models
-library(MASS)
-library(broom) # for tidy output
+library(MASS) # For random data generation with exact means 
 library(knitr) # for nice tables
 
 rm(list = ls())
@@ -63,14 +62,52 @@ data <- c(group_1, group_2)
 df <- tibble(x = rep(c(0, 1), each = group_size),
              y = data)
 
+# Linear model and t.test function 
 t.test(formula = y ~ x, data = df)
 t_test <- summary(lm(formula = y ~ x, data = df))
+
+# Output
 t_test
 
 knitr::kable(coefficients(t_test), digits=3)
 
 ```
+The x estimate indicates the amount that the second group mean differs from the first. If it is negative it means that the mean of the second group is less than that of the first group, whereas if it is positive, the mean of the second group is greater than that of hte first group. 
+
+### Plot T-Test 
+
+NOTE TO SELF: Eventually animate the transition from a standard graph to the density plots 
 ```{r}
+
+# Step 1 - standard graph
+ggplot(data = df, mapping = aes(x = x, y = y)) + 
+  geom_point() + 
+  stat_smooth(method = "lm")
+
+# Step 2 - change axes 
+ggplot(data = df, mapping = aes(x = y, y = x)) + 
+  geom_point() + 
+  stat_smooth(method = "lm")
+
+# Step 3 - remove regression line 
+ggplot(data = df, mapping = aes(x = y, y = x)) + 
+  geom_point() 
+
+# Step 4 - change colours 
+ggplot(data = df, mapping = aes(x = y, y = x, color = x)) + 
+  geom_point(alpha = 0.5) + 
+  theme(legend.position = "none")
+
+# Step 5 - move dots from second graph to the x axis 
+ggplot(data = df, mapping = aes(x = y, y = 0, color = x)) + 
+  geom_point(alpha = 0.5) + 
+  ylim(0, 1)+ 
+  theme(legend.position = "none")
+
+# Step 6 - turn into density plots for easier viewing (how t-tests are usually displayed)
+ggplot(data = df, aes(x = y, group = x, fill = x)) + 
+  geom_density(alpha = 0.5) + 
+  theme(legend.position = "none")
 
 ```
 
