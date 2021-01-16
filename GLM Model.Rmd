@@ -1,0 +1,100 @@
+---
+title: "GLM Model"
+author: "Danielle van Os"
+date: "06/01/2021"
+output: html_document
+---
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(stats) # For linear models
+library(MASS)
+library(broom) # for tidy output
+library(knitr) # for nice tables
+
+rm(list = ls())
+```
+
+## Linear Model - 1 predictor 
+
+### Generate sample data 
+
+To make it faster consider running the lm model, saving it, and adding aspects of that to the graph, rather than running the lm model twice. 
+```{r}
+
+# Parameters 
+sample_size <- 400
+intercept <- 10
+slope <- 3.4
+sd <- 5
+mean <- 0
+
+x <- mvrnorm(n = sample_size, mu = 0, Sigma = sd, empirical = TRUE) 
+y <- intercept + slope*x + mvrnorm(n = sample_size, mu = 0, Sigma = sd, empirical = TRUE) 
+df <- tibble(x = x, y = y)
+
+lm <- summary(lm(formula = y ~ x, data = df))
+
+```
+
+### Plot Linear Model
+
+```{r}
+
+ggplot(data = df, mapping = aes(x = x, y = y)) + 
+  geom_point() + 
+  stat_smooth(method = "lm")
+```
+
+## t-test - 1 variable 2 groups
+
+```{r}
+# Parameters
+group_size <- 200 
+mean_g1 <- 10
+mean_g2 <- 12
+sd_g1 <- 0.3
+sd_g2 <- 0.3
+group_1 <- mvrnorm(n = group_size, mu = mean_g1, Sigma = sd_g1, empirical = TRUE)
+group_2 <- mvrnorm(n = group_size, mu = mean_g2, Sigma = sd_g2, empirical = TRUE)
+data <- c(group_1, group_2)
+
+# Data frame
+df <- tibble(x = rep(c(0, 1), each = group_size),
+             y = data)
+
+t.test(formula = y ~ x, data = df)
+t_test <- summary(lm(formula = y ~ x, data = df))
+t_test
+
+knitr::kable(coefficients(t_test), digits=3)
+
+```
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
