@@ -14,6 +14,16 @@ library(knitr) # for nice tables
 rm(list = ls())
 ```
 
+## GLM Parameters 
+
+
+* number of groups 
+* mean for each group/s 
+* sd for each group/s
+* presence of continuous variable (e.g., for ANCOVA)
+
+
+
 ## Linear Model - 1 predictor 
 
 ### Generate sample data 
@@ -54,17 +64,19 @@ mean_g1 <- 10
 mean_g2 <- 12
 sd_g1 <- 0.3
 sd_g2 <- 0.3
+
+# Data generation
 group_1 <- mvrnorm(n = group_size, mu = mean_g1, Sigma = sd_g1, empirical = TRUE)
 group_2 <- mvrnorm(n = group_size, mu = mean_g2, Sigma = sd_g2, empirical = TRUE)
 data <- c(group_1, group_2)
 
 # Data frame
-df <- tibble(x = rep(c(0, 1), each = group_size),
+df <- tibble(group = rep(c(0, 1), each = group_size),
              y = data)
 
 # Linear model and t.test function 
-t.test(formula = y ~ x, data = df)
-t_test <- summary(lm(formula = y ~ x, data = df))
+t.test(formula = y ~ group, data = df)
+t_test <- summary(lm(formula = y ~ 1 + group, data = df)) # The '1' is a way of writing 1*B0 or 1*intercept, which in this case is 1*10. 
 
 # Output
 t_test
@@ -77,48 +89,150 @@ The x estimate indicates the amount that the second group mean differs from the 
 ### Plot T-Test 
 
 NOTE TO SELF: Eventually animate the transition from a standard graph to the density plots 
-```{r}
+NOTE 2: add intercept horizontal line as well 
+
+```{r graph t-test}
 
 # Step 1 - standard graph
-ggplot(data = df, mapping = aes(x = x, y = y)) + 
+ggplot(data = df, mapping = aes(x =group, y = y)) + 
   geom_point() + 
   stat_smooth(method = "lm")
 
 # Step 2 - change axes 
-ggplot(data = df, mapping = aes(x = y, y = x)) + 
+ggplot(data = df, mapping = aes(x = y, y =group)) + 
   geom_point() + 
   stat_smooth(method = "lm")
 
 # Step 3 - remove regression line 
-ggplot(data = df, mapping = aes(x = y, y = x)) + 
+ggplot(data = df, mapping = aes(x = y, y =group)) + 
   geom_point() 
 
 # Step 4 - change colours 
-ggplot(data = df, mapping = aes(x = y, y = x, color = x)) + 
+ggplot(data = df, mapping = aes(x = y, y =group, color =group)) + 
   geom_point(alpha = 0.5) + 
   theme(legend.position = "none")
 
 # Step 5 - move dots from second graph to the x axis 
-ggplot(data = df, mapping = aes(x = y, y = 0, color = x)) + 
+ggplot(data = df, mapping = aes(x = y, y = 0, color =group)) + 
   geom_point(alpha = 0.5) + 
-  ylim(0, 1)+ 
+  ylim(0, 1) + 
   theme(legend.position = "none")
 
 # Step 6 - turn into density plots for easier viewing (how t-tests are usually displayed)
-ggplot(data = df, aes(x = y, group = x, fill = x)) + 
+ggplot(data = df, aes(x = y, group =group, fill =group)) + 
   geom_density(alpha = 0.5) + 
   theme(legend.position = "none")
 
 ```
 
 
+## ANOVA - 3 groups 
 
+```{r anova}
+# Parameters
+group_size <- 200 
+mean_g1 <- 10
+mean_g2 <- 12
+mean_g3 <- 7
+sd_g1 <- 0.3
+sd_g2 <- 0.3
+sd_g3 <- 0.3 
 
+# Data generation
+group_1 <- mvrnorm(n = group_size, mu = mean_g1, Sigma = sd_g1, empirical = TRUE)
+group_2 <- mvrnorm(n = group_size, mu = mean_g2, Sigma = sd_g2, empirical = TRUE)
+group_3 <- mvrnorm(n = group_size, mu = mean_g3, Sigma = sd_g3, empirical = TRUE)
+data <- c(group_1, group_2, group_3)
 
+# Data frame
+df <- tibble(group_label = rep(c("group_1", "group_2", "group_3"), each = group_size),
+             group_n = as_factor(rep(c(0, 1, 2), each = group_size)),
+             group_2 = rep(c(0,1,0), each = group_size), 
+             group_3 = rep(c(0,0,1), each = group_size),
+             y = data)
 
+# Linear model and anova function 
+summary(aov(y ~ group_label, data = df))
 
+anova <- summary(lm(formula = y ~ 1 + group_2 + group_3, data = df))
 
+# Output
+anova
 
+knitr::kable(coefficients(anova), digits=3)
+
+```
+
+What is a t-test not simply an ANOVA with two groups, or an ANOVA simply a t-test with 3+ groups? 
+
+### Plot ANOVA 
+
+```{r graph_anova}
+
+# Step 1 - standard graph
+ggplot(data = df, mapping = aes(x = group_n, y = y)) + 
+  geom_point() 
+
+# Step 2 - change axes 
+ggplot(data = df, mapping = aes(x = y, y = group_n)) + 
+  geom_point() 
+
+# Step 3 - remove regression line 
+ggplot(data = df, mapping = aes(x = y, y = group_n)) + 
+  geom_point() 
+
+# Step 4 - change colours 
+ggplot(data = df, mapping = aes(x = y, y = group_n, color = group_n)) + 
+  geom_point(alpha = 0.5) + 
+  theme(legend.position = "none")
+
+# Step 5 - move dots from second graph to the x axis 
+ggplot(data = df, mapping = aes(x = y, y = 0, color = group_n)) + 
+  geom_point(alpha = 0.5) + 
+  ylim(0, 1) + 
+  theme(legend.position = "none")
+
+# Step 6 - turn into density plots for easier viewing (how t-tests are usually displayed)
+ggplot(data = df, aes(x = y, group = group_label, fill = group_label)) + 
+  geom_density(alpha = 0.5) 
+
+```
+
+### ANCOVA - multiple groups (categorical) and a continuous predictor
+
+```{r ancova}
+# Parameters
+group_size <- 200 
+mean_g1 <- 10
+mean_g2 <- 12
+mean_g3 <- 7
+sd_g1 <- 0.3
+sd_g2 <- 0.3
+sd_g3 <- 0.3 
+n_groups <- 3
+
+# Data generation
+group_1 <- mvrnorm(n = group_size, mu = mean_g1, Sigma = sd_g1, empirical = TRUE)
+group_2 <- mvrnorm(n = group_size, mu = mean_g2, Sigma = sd_g2, empirical = TRUE)
+group_3 <- mvrnorm(n = group_size, mu = mean_g3, Sigma = sd_g3, empirical = TRUE)
+data <- c(group_1, group_2, group_3)
+continuous <-data + mvrnorm(n = group_size*n_groups, mu = 0, Sigma = 2, empirical = TRUE)
+
+# Data frame
+df <- tibble(group_label = rep(c("group_1", "group_2", "group_3"), each = group_size),
+             group_n = as_factor(rep(c(0, 1, 2), each = group_size)),
+             group_2 = rep(c(0,1,0), each = group_size), 
+             group_3 = rep(c(0,0,1), each = group_size),
+             y = data,
+             x = continuous)
+```
+
+```{r}
+
+ggplot(data = df, mapping = aes(x = x, y = y)) + 
+  geom_point() 
+
+```
 
 
 
