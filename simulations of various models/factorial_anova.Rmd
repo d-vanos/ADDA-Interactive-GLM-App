@@ -1,0 +1,220 @@
+---
+title: "Factorial ANOVA"
+author: "Danielle van Os"
+date: "21/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(stats) # For linear models
+library(MASS) # For random data generation with exact means 
+library(knitr) # for nice tables
+
+rm(list = ls())
+```
+
+
+
+# Two-way/Factorial ANOVA 
+
+The model for a two-way ANOVA with interactions includes:
+
+* Main effect of variable 1   
+* Main effect of variable 2  
+* Interactions between each level of variable 1 and level 2  
+* error 
+
+## Example equations
+
+### Example 1 - 2x3 with interaction
+Variable 1 has two levels, variable 2 has three levels, with an interaction term:
+
+$$ y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \beta_3X_1X_2 $$
+Where:
+
+* $\beta_0$ is the grand mean, or the mean for the first level of all factors  
+* $X_1$ is the score on variable 1 
+* $X_2$ is the score on variable 2 
+* $\beta$ represents the slope or beta value 
+
+NOTE TO SELF: CHANGE THE CODE BELOW SO THERE IS AN OPTION TO HAVE INTERACTIONS OR NO INTERACTION    
+
+What is an interaction? Broadly, it suggests that the effect of one predictor variable on the outcome variable is dependent on the other predictor. 
+
+```{r}
+# THE ISSUE WITH THIS WAY IS THAT VAR1 AND VAR2 ARE ADDED TOGETHER TO CREATE A SINGLE VALUE (RANDOM, NO PARTICULAR REASON, I JUST NEEDED A SINGLE VALUE) BUT ADDING THEM MEANS THEY'RE SINGULAR SO COME UP WITH AN ALTERNATIVE WAY TO MODEL BELOW 
+# Parameters
+total_sample_size <- 600
+
+var1_nvar <- 2
+var1_g1_mean <- 10
+var1_g2_mean <- 12
+var1_g1_sd <- 0.3
+var1_g2_sd <- 0.3
+ 
+var2_nvar <- 3
+var2_g1_mean <- 3
+var2_g2_mean <- 6
+var2_g3_mean <- 8
+var2_g1_sd <- 0.3
+var2_g2_sd <- 0.3
+var2_g3_sd <- 0.3 
+
+ 
+
+# Data generation
+var1_g1 <- mvrnorm(n = round(total_sample_size/var1_nvar), mu = var1_g1_mean, Sigma = var1_g1_sd, empirical = TRUE)
+var1_g2 <- mvrnorm(n = round(total_sample_size/var1_nvar), mu = var1_g2_mean, Sigma = var1_g2_sd, empirical = TRUE)
+var1 <- c(var1_g1, var1_g2)
+
+var2_g1 <- mvrnorm(n = round(total_sample_size/var2_nvar), mu = var2_g1_mean, Sigma = var2_g1_sd, empirical = TRUE)
+var2_g2 <- mvrnorm(n = round(total_sample_size/var2_nvar), mu = var2_g2_mean, Sigma = var2_g2_sd, empirical = TRUE)
+var2_g3 <- mvrnorm(n = round(total_sample_size/var2_nvar), mu = var2_g3_mean, Sigma = var2_g3_sd, empirical = TRUE)
+var2 <- c(var2_g1, var2_g2, var2_g3)
+
+# Data frame
+df <- tibble(var1_label = rep(c("group_1", "group_2"), each = total_sample_size/var1_nvar),
+             var2_label = rep(c("group_1", "group_2", "group_3"), each = total_sample_size/var2_nvar),
+             
+             y = c(var1 + var2),
+             
+             var1_group_n = as_factor(rep(c(1, 2), each = total_sample_size/var1_nvar)),
+             var2_group_n = as_factor(rep(c(1, 2, 3), each = total_sample_size/var2_nvar)),
+             
+             var1_g2 = ifelse(var1_label == "group_2", 1, 0),
+             var2_g2 = ifelse(var2_label == "group_2", 1, 0),
+             var2_g3 = ifelse(var2_label == "group_3", 1, 0)
+             )
+
+# Linear model and anova function 
+summary(aov(y ~ var1_label + var2_label, data = df))
+
+fact_anova1 <- summary(lm(formula = y ~ 1 + var1_g2 + var2_g2 + var2_g3 + var1_g2*var2_g2 + var1_g2*var2_g3, data = df))
+fact_anova2 <- summary(lm(formula = y ~ var1_label * var2_label, data = df))
+
+fact_anova1
+fact_anova2
+# Output
+anova
+
+knitr::kable(coefficients(anova), digits=3)
+```
+
+## 2x2 ANOVA 
+
+```{r}
+
+# Set coefficients
+alpha = 10
+beta1 = .3
+beta2 = -.5
+beta3 = -1.1
+
+# Generate 200 trials
+A = c(rep(c(0), 100), rep(c(1), 100)) # '0' 100 times, '1' 100 times
+B = rep(c(rep(c(0), 50), rep(c(1), 50)), 2) # '0'x50, '1'x50, '0'x50, '1'x50
+e = rnorm(200, 0, sd=1) # Random noise, with standard deviation of 1
+
+# Generate your data using the regression equation
+y = alpha + beta1*A + beta2*B + beta3*A*B + e
+
+# Join the variables in a data frame
+data = data.frame(cbind(A, B, y))
+
+# Fit an ANOVA
+model = aov(y ~ A*B, data=data)
+summary(model)
+```
+
+## 3x2 ANOVA
+```{r}
+# Set coefficients
+alpha = 10
+beta1 = .3
+beta2 = -.5
+beta3 = -1.1
+beta4 = 0.5
+
+## Generate data 
+# 3x2 balanced design
+A = c(0,0,0,0,1,1,1,1)
+B = c(0,0,1,1,0,0,1,1)
+C = c(0,1,0,1,0,1,0,1)
+
+# Repeat 50 times, for N = 200
+A = rep(A, 50)
+B = rep(B, 50)
+C = rep(C, 50)
+e = rnorm(400, 0, sd=1) # Random noise, with standard deviation of 1 
+
+# Generate your data using the regression equation
+# NOTE TO SELF: should I include two-way interactions here??? 
+y = alpha + beta1*A + beta2*B + beta3*C + beta4*A*B*C + e
+
+# Join the variables in a data frame
+data = data.frame(cbind(A, B, C, y))
+
+# Fit an ANOVA
+model = aov(y ~ A*B*C, data=data)
+summary(model)
+
+```
+
+
+
+
+
+```{r}
+
+y = 1*alpha + var1_g2 + var2_g2 + var2_g3 + var1_g2*var2_g2 + var1_g2*var2_g3
+
+# Join the variables in a data frame
+data = tibble(A, 
+              B, 
+              y,
+              A_g2 = ifelse(A == 1, 1, 0),
+              B_g2 = ifelse(B == 1, 1, 0),
+              B_g3 = ifelse(B == 2, 1, 0))
+
+# Fit an ANOVA
+model = aov(y ~ A*B, data=data)
+summary(model)
+
+# Linear model equivalent 
+"A"
+A
+"B"
+B
+```
+
+In R it is written as follows: 
+```{r class.source = 'fold-show', eval = FALSE}
+
+lm(outcome_var ~ 1 + # the 1 is included to indicate $1*B0/intercept
+   var1_level2 + var2_level2 + var2_level3 + # main effects 
+     var1_level2*var2_level2 + var1_level2*var2_level3) # interaction terms 
+  
+```
+
+
+Note the first group on both variables is not included.
+
+### - 2x3 without interaction
+
+
+### - 4x5 with interaction
+
+It quickly gets difficult to model each 
+
+
+
+
+
+
+
+
+
+
+

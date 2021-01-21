@@ -1,0 +1,78 @@
+---
+title: "ANCOVA"
+author: "Danielle van Os"
+date: "21/01/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(stats) # For linear models
+library(MASS) # For random data generation with exact means 
+library(knitr) # for nice tables
+
+rm(list = ls())
+```
+
+
+### ANCOVA - multiple groups (categorical) and a continuous predictor
+
+ANCOVA is an extension of ANOVA where you control for one or more covariates.
+
+A covariate is a continuous variable that is correlated with the dependent variable but is not the focus of the study.
+
+In an ANOVA, the variance due to covariates becomes error. If it is controlled in an ANCOVA, then the error variance is less, so you more accurately assess the variance
+due to the factor (the IV).
+
+Assumptions:  
+
+* **ANOVA assumptions - normality and homogeneity of variance**
+* **Linearity between pairs of covariates** - if there is more than one covariate
+* **Linearity between the covariates and the DV** 
+* **Homogeneity of regression** - the regression slope between the continuous predictor and outcome variable should be the same for all groups, or there should be no interaction between the continuous predictor and group levels in predicting the outcome variable. 
+* **Independence of covariate and factor** - the categorical and continuous predictors should be independent 
+
+Equation ANCOVA: y (person's score) = intercept for group 1 + intercept for each group + 
+Equation MLM: y (person's score) = (general intercept + random intercept for each group) + (general regression term/slope + random slope for each group) + error 
+
+```{r ancova}
+# Parameters
+group_size <- 200 
+mean_g1 <- 10
+mean_g2 <- 12
+mean_g3 <- 7
+sd_g1 <- 0.3
+sd_g2 <- 0.3
+sd_g3 <- 0.3 
+n_groups <- 3
+
+# Data generation
+group_1 <- mvrnorm(n = group_size, mu = mean_g1, Sigma = sd_g1, empirical = TRUE)
+group_2 <- mvrnorm(n = group_size, mu = mean_g2, Sigma = sd_g2, empirical = TRUE)
+group_3 <- mvrnorm(n = group_size, mu = mean_g3, Sigma = sd_g3, empirical = TRUE)
+data <- c(group_1, group_2, group_3)
+continuous <-data + mvrnorm(n = group_size*n_groups, mu = 0, Sigma = 2, empirical = TRUE)
+
+# Data frame
+df <- tibble(group_label = rep(c("group_1", "group_2", "group_3"), each = group_size),
+             group_n = as_factor(rep(c(0, 1, 2), each = group_size)),
+             group_2 = rep(c(0,1,0), each = group_size), 
+             group_3 = rep(c(0,0,1), each = group_size),
+             y = data,
+             x = continuous)
+```
+
+```{r}
+
+ggplot(data = df, mapping = aes(x = x, y = y)) + 
+  geom_point() 
+
+```
+
+
+
+
+
+
+

@@ -1,0 +1,86 @@
+---
+title: "T-Test"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(stats) # For linear models
+library(MASS) # For random data generation with exact means 
+library(knitr) # for nice tables
+
+rm(list = ls())
+```
+
+
+
+## t-test - 1 variable 2 groups
+
+```{r}
+# Parameters
+group_size <- 200 
+mean_g1 <- 10
+mean_g2 <- 12
+sd_g1 <- 0.3
+sd_g2 <- 0.3
+
+# Data generation
+group_1 <- mvrnorm(n = group_size, mu = mean_g1, Sigma = sd_g1, empirical = TRUE)
+group_2 <- mvrnorm(n = group_size, mu = mean_g2, Sigma = sd_g2, empirical = TRUE)
+data <- c(group_1, group_2)
+
+# Data frame
+df <- tibble(group = rep(c(0, 1), each = group_size),
+             y = data)
+
+# Linear model and t.test function 
+t.test(formula = y ~ group, data = df)
+t_test <- summary(lm(formula = y ~ 1 + group, data = df)) # The '1' is a way of writing 1*B0 or 1*intercept, which in this case is 1*10. 
+
+# Output
+t_test
+
+knitr::kable(coefficients(t_test), digits=3)
+
+```
+The x estimate indicates the amount that the second group mean differs from the first. If it is negative it means that the mean of the second group is less than that of the first group, whereas if it is positive, the mean of the second group is greater than that of hte first group. 
+
+### Plot T-Test 
+
+NOTE TO SELF: Eventually animate the transition from a standard graph to the density plots 
+NOTE 2: add intercept horizontal line as well 
+
+```{r graph t-test}
+
+# Step 1 - standard graph
+ggplot(data = df, mapping = aes(x =group, y = y)) + 
+  geom_point() + 
+  stat_smooth(method = "lm")
+
+# Step 2 - change axes 
+ggplot(data = df, mapping = aes(x = y, y =group)) + 
+  geom_point() + 
+  stat_smooth(method = "lm")
+
+# Step 3 - remove regression line 
+ggplot(data = df, mapping = aes(x = y, y =group)) + 
+  geom_point() 
+
+# Step 4 - change colours 
+ggplot(data = df, mapping = aes(x = y, y =group, color =group)) + 
+  geom_point(alpha = 0.5) + 
+  theme(legend.position = "none")
+
+# Step 5 - move dots from second graph to the x axis 
+ggplot(data = df, mapping = aes(x = y, y = 0, color =group)) + 
+  geom_point(alpha = 0.5) + 
+  ylim(0, 1) + 
+  theme(legend.position = "none")
+
+# Step 6 - turn into density plots for easier viewing (how t-tests are usually displayed)
+ggplot(data = df, aes(x = y, group =group, fill =group)) + 
+  geom_density(alpha = 0.5) + 
+  theme(legend.position = "none")
+
+```

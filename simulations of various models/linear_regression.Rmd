@@ -1,0 +1,45 @@
+---
+title: "Linear Regression"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(stats) # For linear models
+library(MASS) # For random data generation with exact means 
+library(knitr) # for nice tables
+
+rm(list = ls())
+```
+
+## Linear Model - 1 predictor 
+
+### Generate sample data 
+
+To make it faster consider running the lm model, saving it, and adding aspects of that to the graph, rather than running the lm model twice. 
+```{r}
+
+# Parameters 
+sample_size <- 400
+intercept <- 10
+slope <- 3.4
+sd <- 5
+mean <- 0
+
+x <- mvrnorm(n = sample_size, mu = 0, Sigma = sd, empirical = TRUE) 
+y <- intercept + slope*x + mvrnorm(n = sample_size, mu = 0, Sigma = sd, empirical = TRUE) 
+df <- tibble(x = x, y = y)
+
+lm <- summary(lm(formula = y ~ x, data = df))
+
+```
+
+### Plot Linear Model
+
+```{r}
+
+ggplot(data = df, mapping = aes(x = x, y = y)) + 
+  geom_point() + 
+  stat_smooth(method = "lm")
+```
