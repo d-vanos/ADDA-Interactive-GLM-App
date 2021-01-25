@@ -14,7 +14,7 @@ rm(list = ls())
 ```
 
 
-## ANOVA - 3 groups 
+# ANOVA - 3 groups 
 
 ```{r anova}
 # Parameters
@@ -57,7 +57,7 @@ NOTE TO SELF: FIGURE OUT HOW TO DO THIS USING BETAS INSTEAD
 
 What is a t-test not simply an ANOVA with two groups, or an ANOVA simply a t-test with 3+ groups? 
 
-### Plot ANOVA 
+## Plot ANOVA 
 
 ```{r graph_anova}
 
@@ -88,4 +88,40 @@ ggplot(data = df, mapping = aes(x = y, y = 0, color = group_n)) +
 ggplot(data = df, aes(x = y, group = group_label, fill = group_label)) + 
   geom_density(alpha = 0.5) 
 
+```
+
+## Alternative Way of Specifying 
+
+Rather than using the means for each group, it is also possible to use the beta values to generate data. In some ways it will be similar to the method above.
+
+### Generate data 
+```{r}
+# Parameters 
+group_size <- 200
+alpha <- 10
+beta1 <- 2 
+beta2 <- -3 
+e <-  mvrnorm(n = group_size*3, mu = 0, Sigma = 0.3, empirical = TRUE)
+
+# Generate group membership 
+df <- tibble(
+  group = rep(c("group_1", "group_2", "group_3"), each = group_size),
+  group_1 = rep(c(1,0,0), each = group_size),
+  group_2 = rep(c(0,1,0), each = group_size), 
+  group_3 = rep(c(0,0,1), each = group_size)
+)
+
+# Generate your data using the regression equation
+y = alpha + beta1*df$group_2 + beta2*df$group_3 + e
+
+# Add y value to data 
+df <- df %>% 
+  mutate(y = y)
+```
+
+### Fit models to data
+```{r}
+# Fit an ANOVA
+model = lm(y ~ group, data=df)
+summary(model)
 ```

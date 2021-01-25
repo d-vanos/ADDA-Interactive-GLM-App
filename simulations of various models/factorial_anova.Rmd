@@ -26,6 +26,131 @@ The model for a two-way ANOVA with interactions includes:
 * Interactions between each level of variable 1 and level 2  
 * error 
 
+$$ y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \beta_3X_1X_2 $$
+
+Where:
+
+* $\beta_0$ is the grand mean, or the mean for the first level of all factors  
+* $X_1$ is the score on variable 1 
+* $X_2$ is the score on variable 2 
+* $\beta$ represents the slope or beta value 
+
+
+
+## Example 1 - 2x2 with interaction
+Both variable 1 and variable 2 have two levels. There is also an interaction term. 
+
+Using means: 
+```{r}
+
+# Parameters 
+group_size <- 200
+var1_g1_var2_g1_mean <- 10 # gender female + brown_eyes false 
+var1_g1_var2_g2_mean <- 12 # gender female + brown eyes true
+var1_g2_var2_g1_mean <- 7  # gender male + brown eyes false
+var1_g2_var2_g2_mean <- 4  # gender male + brown eyes true 
+sd <- 0.3
+
+# Data generation
+var1_g1_var2_g1 <- mvrnorm(n = group_size, mu = var1_g1_var2_g1_mean, Sigma = sd, empirical = TRUE)
+var1_g1_var2_g2 <- mvrnorm(n = group_size, mu = var1_g1_var2_g2_mean, Sigma = sd, empirical = TRUE)
+var1_g2_var2_g1 <- mvrnorm(n = group_size, mu = var1_g2_var2_g1_mean, Sigma = sd, empirical = TRUE)
+var1_g2_var2_g2 <- mvrnorm(n = group_size, mu = var1_g2_var2_g2_mean, Sigma = sd, empirical = TRUE)
+y <- c(var1_g1_var2_g1, var1_g1_var2_g2, var1_g2_var2_g1, var1_g2_var2_g2)
+
+# Data frame 
+df <- tibble(
+  gender = c(rep(c("female"), group_size*2), rep(c("male"), group_size*2)),
+  brown_eyes = rep(c(rep(c("no"), group_size), rep(c("yes"), group_size)), 2),
+  gender_male = ifelse(gender == "female", 0, 1),
+  brown_eyes_true = ifelse(brown_eyes == "no", 0, 1),
+  like_ice_cream = y
+)
+
+# Linear model and anova function 
+summary(aov(y ~ gender * brown_eyes, data = df))
+summary(lm(y ~ gender * brown_eyes, data = df))
+two_anova <- summary(lm(y ~ 1 + gender_male + brown_eyes_true + gender_male:brown_eyes_true, data = df))
+two_anova
+two_anova_no_int <- summary(lm(y ~ 1 + gender_male + brown_eyes_true, data = df))
+two_anova_no_int
+
+# Main effect of gender
+# average of gender female, which is coded 0, is 11 and is the intercept
+summary(lm(y ~ 1 + gender_male, data = df))
+
+# Main effect of eye colour
+# Average of eye colour not brown, which is coded 0, is 8.5 and is the intercept 
+summary(lm(y ~ 1 + brown_eyes_true, data = df))
+
+```
+
+You can interpret the output above as follows: 
+
+* the intercept is 'gender female + brown_eyes false', as female is coded as '0' and no brown eyes is coded as '0'.  
+* `gender_male` has a value of -3, indicating the rating for ice cream is 3 less for males who also do not have brown eyes than for females who do not have brown eyes. So it holds the other variable, brown eyes, constant (meaning it doesn't manipulate the value of brown eyes when comparing males and females).  
+* `brown_eyes_true` has a value of 2, indicating the rating for ice cream is 2 more for females who have brown eyes than those who don't. It holds the other variable, gender, constant, meaning it doesn't manipulate gender while investigating the difference in ice cream ratings for females with brown eyes vs other coloured eyes.
+
+
+
+```{r}
+# NOTE TO SELF: HAVE OPTION TO SWITCH AXES SO OTHER VARIABLE DISPLAYED ON THE BOTTOM 
+ggplot(data = df, mapping = aes(x = gender, y = like_ice_cream, colour = brown_eyes)) + 
+  geom_point(alpha = 0.5) + 
+  geom_segment(x = -10, xend = 100, y = two_anova$coefficients[1], yend = 10, lwd = 1, col = 'black')
+
+mean(df$like_ice_cream[df$brown_eyes_true == 1 & df$gender == "female"])
+mean(df$like_ice_cream[df$brown_eyes_true == 0 & df$gender == "male"])
+mean(df$like_ice_cream[df$brown_eyes_true == 1 & df$gender == "male"])
+  
+```
+
+
+Using coefficients: 
+
+```{r}
+
+# Set coefficients
+alpha = 10
+beta1 = 
+beta2 = -.5
+beta3 = -1.1
+
+# Generate 200 trials
+A = c(rep(c(0), 100), rep(c(1), 100)) # '0' 100 times, '1' 100 times
+B = rep(c(rep(c(0), 50), rep(c(1), 50)), 2) # '0'x50, '1'x50, '0'x50, '1'x50
+e = rnorm(200, 0, sd=1) # Random noise, with standard deviation of 1
+
+# Generate your data using the regression equation
+y = alpha + beta1*A + beta2*B + beta3*A*B + e
+
+# Join the variables in a data frame
+data = data.frame(cbind(A, B, y))
+
+# Fit an ANOVA
+model = aov(y ~ A*B, data=data)
+summary(model)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Example equations
 
 ### Example 1 - 2x3 with interaction
