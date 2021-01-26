@@ -7,6 +7,17 @@ library(MASS) # For random data generation with exact means
 # Define server
 shinyServer(function(input, output) {
   
+  #### Generate data ####
+  # Regression data
+  linear_df <- reactive(tibble(x = mvrnorm(n = input$sample_size, 
+                                           mu = 0, 
+                                           Sigma = input$within_groups_variance, 
+                                           empirical = TRUE), 
+                               y = input$intercept + input$slope*x + mvrnorm(n = input$sample_size, 
+                                                                             mu = 0, Sigma = input$within_groups_variance, 
+                                                                             empirical = TRUE)))
+  
+  # ANOVA data 
   group_1 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_1, Sigma = input$within_groups_variance, empirical = TRUE))
   group_2 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_2, Sigma = input$within_groups_variance, empirical = TRUE))
   # group_3 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_3, Sigma = input$within_groups_variance, empirical = TRUE))
@@ -23,21 +34,22 @@ shinyServer(function(input, output) {
   
   # Print dataset 
   output$dataset <- renderDataTable(
-    df(), 
+    linear_df(), 
     options = list(lengthChange = FALSE,
                    searching = FALSE),
     rownames = FALSE
   )
   
   # Print data 
-  output$data <- renderText(
-    as.character(group_1)
-  )
+  # output$data <- renderText(
+  #   as.character(group_1)
+  # )
   
   # Print graph
   output$graph <- renderPlot({
-    reactive(ggplot(data = df, mapping = aes(x = group_n, y = y)) + 
-      geom_point()) 
+    ggplot(data = linear_df(), mapping = aes(x = x, y = y)) + 
+      geom_point() + 
+      stat_smooth(method = "lm")
   })
 
 })

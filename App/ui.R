@@ -24,25 +24,49 @@ shinyUI(
                 # Predictor Type
                 radioButtons(inputId = "predictor_type", 
                          label = "Predictor Type",
-                         choices = c("Continous", "Categorical"),
+                         choices = c("Continuous", "Categorical"),
                          inline = TRUE),
                 
+                checkboxInput(inputId = "show_regression_line",
+                              label = "Show Regression Line"),
+                
+                sliderInput(inputId = "sample_size",
+                            label   = "Sample Size per Group",
+                            value   = 50, 
+                            min     = 1, 
+                            max     = 1000), 
+                
+                sliderInput(inputId = "within_groups_variance",
+                            label   = "Variance",
+                            min     = 0,
+                            max     = 3, # Consider changing this - fiddle with it 
+                            value   = 1, 
+                            step    = 0.01),
+                
                 # Selection options if the predictor type is continuous
-                # conditionalPanel(
-                #     condition = "input.predictor_type == 'Continuous'",
-                # )
-                # 
+                conditionalPanel(
+                    condition = "input.predictor_type == 'Continuous'",
+                    
+                    sliderInput(inputId = "intercept",
+                                label = "Intercept",
+                                min = -10,
+                                max = +10,
+                                value = 0),
+                    
+                    sliderInput(inputId = "slope",
+                                label = "Slope",
+                                min = -3,
+                                max = +3,
+                                value = 0)
+                ),
+
                 
                 
                 # Selection options if the predictor type is categorical
                 conditionalPanel(
                     condition = "input.predictor_type == 'Categorical'",
                     
-                    sliderInput(inputId = "sample_size",
-                                 label   = "Sample Size per Group",
-                                 value   = 50, 
-                                 min     = 1, 
-                                 max     = 1000), 
+                    
                     
                     numericInput(inputId = "n_groups",
                                  label   = "Number of groups",
@@ -50,12 +74,6 @@ shinyUI(
                                  min     = 2, 
                                  max     = 5), # Could be higher but that might make it difficult to select means for each group
                     
-                    sliderInput(inputId = "within_groups_variance",
-                                label   = "Within-groups variance",
-                                min     = 0,
-                                max     = 3, # Consider changing this - fiddle with it 
-                                value   = 1, 
-                                step    = 0.01),
                     
                     # DEBUG: DD THIS LATER BECAUSE THIS WILL HAVE TO INTERACT WITH THE MEANS SPECIFIED BELOW
                     # sliderInput(inputID = "between_groups_variance",
