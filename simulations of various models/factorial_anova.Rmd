@@ -85,25 +85,94 @@ summary(lm(y ~ 1 + brown_eyes_true, data = df))
 
 ```
 
+Intercept (10) -3 because you're male + 2 because you have brown eyes -5 
+
 You can interpret the output above as follows: 
 
 * the intercept is 'gender female + brown_eyes false', as female is coded as '0' and no brown eyes is coded as '0'.  
 * `gender_male` has a value of -3, indicating the rating for ice cream is 3 less for males who also do not have brown eyes than for females who do not have brown eyes. So it holds the other variable, brown eyes, constant (meaning it doesn't manipulate the value of brown eyes when comparing males and females).  
-* `brown_eyes_true` has a value of 2, indicating the rating for ice cream is 2 more for females who have brown eyes than those who don't. It holds the other variable, gender, constant, meaning it doesn't manipulate gender while investigating the difference in ice cream ratings for females with brown eyes vs other coloured eyes.
+* `brown_eyes_true` has a value of 2, indicating the rating for ice cream is 2 more for females who have brown eyes than those who don't. It holds the other variable, gender, constant, meaning it doesn't manipulate gender while investigating the difference in ice cream ratings for females with brown eyes vs other coloured eyes.  
+* `gender_male:brown_eyes_true` has a value of -5
 
 
 
 ```{r}
 # NOTE TO SELF: HAVE OPTION TO SWITCH AXES SO OTHER VARIABLE DISPLAYED ON THE BOTTOM 
+# ALSO CREATE ANIMATION FROM THIS 
 ggplot(data = df, mapping = aes(x = gender, y = like_ice_cream, colour = brown_eyes)) + 
   geom_point(alpha = 0.5) + 
   geom_segment(x = -10, xend = 100, y = two_anova$coefficients[1], yend = 10, lwd = 1, col = 'black')
+
+ggplot(data = df, mapping = aes(x = gender, y = like_ice_cream, colour = brown_eyes)) + 
+  geom_point(alpha = 0.5) + 
+  geom_segment(x = 0, xend = 100, y = two_anova$coefficients[1], yend = 10, lwd = 1, col = 'black') + 
+  geom_segment(x = 0.4, xend = 2, y = two_anova$coefficients[1], yend = two_anova$coefficients[1] + two_anova$coefficients[2], size = 1, colour = "black") + 
+  geom_segment(x = 0.4, xend = 1, y = two_anova$coefficients[1], yend = two_anova$coefficients[1] + two_anova$coefficients[3], size = 1, colour = "black")
+```
+
+# Graph - Similar to One-way ANOVA 
+```{r}
+# Step 1 - number line
+ggplot(data = df, mapping = aes(x = "", y = like_ice_cream)) + 
+  geom_point() 
+
+# Step 2 - divide by gender
+ggplot(data = df, mapping = aes(x = gender, y = like_ice_cream)) + 
+  geom_point() 
+
+# Step 3 - colour by eye colour
+ggplot(data = df, mapping = aes(x = gender, y = like_ice_cream, colour = brown_eyes)) + 
+  geom_point() 
+
+# Step 4 - change axes
+ggplot(data = df, mapping = aes(x = like_ice_cream, y = gender, colour = brown_eyes)) + 
+  geom_point() 
+
+# Step 5 - move dots from second graph to the x axis 
+ggplot(data = df, mapping = aes(x = like_ice_cream, y = 0, color = brown_eyes)) + 
+  geom_point(alpha = 0.5) + 
+  ylim(0, 1) + 
+  theme(legend.position = "none")
+
+# Step 6 - turn into density plots for easier viewing (how t-tests are usually displayed)
+df_groups <- df %>% 
+  mutate(groups = paste0(gender, "_", brown_eyes, "_brown_eyes"))
+
+ggplot(data = df_groups, aes(x = like_ice_cream, group = groups, fill = brown_eyes)) + 
+  geom_density(alpha = 0.5, show.legend = FALSE) 
+```
+  
+```{r}
+
+
 
 mean(df$like_ice_cream[df$brown_eyes_true == 1 & df$gender == "female"])
 mean(df$like_ice_cream[df$brown_eyes_true == 0 & df$gender == "male"])
 mean(df$like_ice_cream[df$brown_eyes_true == 1 & df$gender == "male"])
   
 ```
+```{r}
+# Step 1 - Linear regression way of specifying 
+ggplot(data = df, mapping = aes(x = gender, y = like_ice_cream, colour = brown_eyes)) + 
+  geom_point(alpha = 0.5) 
+
+# Step 2 - use mean instead of showing all data 
+df_mean <- df %>% 
+  group_by(gender, brown_eyes) %>% 
+  summarise(avg_like_ice_cream = mean(like_ice_cream)) %>% 
+  ungroup()
+
+ggplot(data = df_mean, mapping = aes(x = gender, y = avg_like_ice_cream, color = brown_eyes)) + 
+  geom_point(size = 3)
+
+# Step 3 - add lines 
+ggplot(data = df_mean, mapping = aes(x = gender, y = avg_like_ice_cream, color = brown_eyes)) + 
+  geom_point(size = 3) + 
+  geom_segment(x = 1, xend = 2, y = as.numeric(df_mean[1, 'avg_like_ice_cream']), yend = as.numeric(df_mean[3, 'avg_like_ice_cream']), colour = "#F8766D") + 
+  geom_segment(x = 1, xend = 2, y = as.numeric(df_mean[2, 'avg_like_ice_cream']), yend = as.numeric(df_mean[4, 'avg_like_ice_cream']), colour = "#00BFC4")
+
+```
+
 
 
 Using coefficients: 
