@@ -1,8 +1,6 @@
 
 #
 
-library(shiny)
-library(MASS) # For random data generation with exact means 
 
 # Define server
 shinyServer(function(input, output) {
@@ -11,18 +9,18 @@ shinyServer(function(input, output) {
   # Regression data
   linear_df <- reactive(tibble(x = mvrnorm(n = input$sample_size, 
                                            mu = 0, 
-                                           Sigma = input$within_groups_variance, 
+                                           Sigma = input$variance, 
                                            empirical = TRUE), 
                                y = input$intercept + input$slope*x + mvrnorm(n = input$sample_size, 
-                                                                             mu = 0, Sigma = input$within_groups_variance, 
+                                                                             mu = 0, Sigma = input$variance, 
                                                                              empirical = TRUE)))
   
   # ANOVA data 
-  group_1 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_1, Sigma = input$within_groups_variance, empirical = TRUE))
-  group_2 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_2, Sigma = input$within_groups_variance, empirical = TRUE))
-  # group_3 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_3, Sigma = input$within_groups_variance, empirical = TRUE))
-  # group_4 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_4, Sigma = input$within_groups_variance, empirical = TRUE))
-  # group_5 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_5, Sigma = input$within_groups_variance, empirical = TRUE))
+  group_1 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_1, Sigma = input$variance, empirical = TRUE))
+  group_2 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_2, Sigma = input$variance, empirical = TRUE))
+  # group_3 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_3, Sigma = input$variance, empirical = TRUE))
+  # group_4 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_4, Sigma = input$variance, empirical = TRUE))
+  # group_5 <- reactive(mvrnorm(n = input$sample_size, mu = input$mean_5, Sigma = input$variance, empirical = TRUE))
   
   sample_size <- reactive(input$sample_size)
   n_groups <- reactive(input$n_groups - 1)
@@ -36,8 +34,7 @@ shinyServer(function(input, output) {
   output$dataset <- renderDataTable(
     linear_df(), 
     options = list(lengthChange = FALSE,
-                   searching = FALSE),
-    rownames = FALSE
+                   searching = FALSE)
   )
   
   # Print data 
