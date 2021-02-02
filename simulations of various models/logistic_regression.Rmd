@@ -1,0 +1,96 @@
+---
+title: "Logistic Regression"
+author: "Danielle van Os"
+date: "02/02/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Remove previous environment
+rm(list = ls())
+
+# Load libraries
+library(tidyverse)
+library(MASS) # mvrnorm
+
+
+```
+
+To use the general linear model for binary outcome variables (e.g., yes/no) you need a logistic link, which gives a logistic regression model. 
+
+Recall the regression equation: 
+
+$$ f(x) = \alpha + \beta_1x + ... + \beta_px$$
+
+And the logistic function: 
+
+$$\frac {1}{1 + e^{-x}}$$
+Where:  
+* 1 in the numerator is the curve's maximum value
+
+In the case of logistic regression, the regression equation is substituted into the 'x' value in the logistic function: 
+
+$$f(x) = \frac {1}{1 + e^{-(\alpha + \beta_1x + ... + \beta_px)}}$$
+
+
+## Standard Logistic Regression
+
+```{r}
+
+# Set parameters 
+sample_size <- 300
+intercept <- 10
+slope <- 40
+sd <- 0.1
+mean <- 0
+
+# Logistic function
+logistic <- function(x){
+  return(1 / (1 + exp(-x)))
+}
+
+
+# Simulate data 
+# x value
+x <- mvrnorm(n = sample_size, mu = 0, Sigma = sd, empirical = TRUE) 
+
+# Regression equation to sub into logistic function
+regression_eq <- intercept + slope*x + mvrnorm(n = sample_size, mu = 0, Sigma = sd, empirical = TRUE) 
+
+# y value 
+y <- logistic(regression_eq)
+
+# Creating the tibble 
+df <- tibble(x = x, y = y)
+
+# Running the model 
+lm <- summary(lm(formula = y ~ x, data = df))
+lm
+
+```
+
+```{r}
+
+ggplot(data = df, mapping = aes(x = x, y = y)) + 
+  geom_point()
+
+```
+
+## Logistic Regression with Categorical Predictor Variables 
+
+Resources:  
+* https://stats.stackexchange.com/questions/3386/how-to-deal-with-non-binary-categorical-variables-in-logistic-regression-spss  
+* https://stats.stackexchange.com/questions/225058/logistic-regression-with-only-categorical-predictors  
+
+```{r}
+
+```
+
+## Multinomial Logistic Regression 
+
+```{r}
+
+```
+
