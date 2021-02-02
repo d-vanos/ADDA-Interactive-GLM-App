@@ -16,7 +16,11 @@ shinyUI(
                       sidebarMenu(
                           menuItem("Visualising the GLM", tabName = "graph", icon = icon("chart-area")),
                           menuItem("Learning Exercises", tabName = "exercises", icon = icon("chalkboard-teacher")),
-                          menuItem("R Code", tabName = "code", icon = icon("code"))
+                          menuItem("R Code", tabName = "code", icon = icon("code"),
+                                   startExpanded = TRUE,
+                                   menuSubItem("Create R Models", tabName = "r_models"),
+                                   menuSubItem("Test Your Understanding", tabName = "test_understanding"),
+                                   menuSubItem("Useful Code", tabName = "useful_code"))
                       )
                   ),
                   dashboardBody(
@@ -25,13 +29,20 @@ shinyUI(
                       tabItem(tabName = "graph", h2("Visualising General Linear Models"),
                               
                               fluidRow(
+                                  column(width = 4,
                                   
                                   #### Parameters box ####
                                   box(title = "Parameters", 
+                                      width = NULL,
                                       
                                       # Predictor Type
                                       radioButtons(inputId = "predictor_type", 
-                                                   label = "Predictor Type",
+                                                   label = "Predictor Variable Type",
+                                                   choices = c("Continuous", "Categorical"),
+                                                   inline = TRUE),
+                                      
+                                      radioButtons(inputId = "outcome_type", 
+                                                   label = "Outcome Variable Type",
                                                    choices = c("Continuous", "Categorical"),
                                                    inline = TRUE),
                                       
@@ -44,7 +55,7 @@ shinyUI(
                                                   min     = 1, 
                                                   max     = 1000),
                                       
-                                      bsTooltip(id = "sample_size", title = "If you have selected more than one group, this refers to the sample size per group.", placement = "top"),
+                                      bsTooltip(id = "sample_size", title = "If your predictor variable is categorical and you have selected more than one group, this refers to the sample size per group.", placement = "top"),
                                       
                                       sliderInput(inputId = "within_groups_variance",
                                                   label   = "Variance",
@@ -62,6 +73,8 @@ shinyUI(
                                                       min = -10,
                                                       max = +10,
                                                       value = 0),
+                                          
+                                          bsTooltip(id = "intercept", title = "The intercept is the value of the y-axis when x = 0. When your predictor variable is continuous, the intercept is the mean value of the first group, which is known as the reference group.", placement = "top"),
                                           
                                           sliderInput(inputId = "slope",
                                                       label = "Slope",
@@ -148,32 +161,52 @@ shinyUI(
                                           )
                                       )
                                   ),
+                                  box(title = "Dataset",
+                                      width = NULL,
+                                      dataTableOutput("dataset")
+                                      
+                                  ),
+                                  ),
+                                  
+                                  column(width = 8,
                                   
                                   box(title = "Equation",
+                                      width = NULL,
                                       HTML("Equation to go here.")), 
                                   
+                                  box(title = "Model Info",
+                                      width = NULL,
+                                      HTML("Information about the model to go here. For example, if it is categorical and has two groups, it is an ANOVA. 
+                                           This section can include info on how models relate to one another.")),
+                                  
                                   box(title = "Graph",
-                                      
+                                      width = NULL,
                                       plotOutput("graph")
                                       
                                   ),
                                   
-                                  box(title = "Dataset",
-                                      
-                                      dataTableOutput("dataset")
-                                      
-                                  ),
-                                  
                                   box(title = "R Model Output",
-                                      
+                                      width = NULL,
                                       textOutput("data"),
                                       HTML("R Model Output to go here.")
+                                  )
                                   )
                                   
                               )
                       ),
-                      tabItem(tabName = "exercises", h2("Learning Exercises")),
-                      tabItem(tabName = "code", h2("R Code"))
+                      
+                      ####--------------------####
+                      #### Learning Exercises ####
+                      ####--------------------####
+                      
+                      tabItem(tabName = "exercises", h2("Learning Exercises"),
+                              fluidRow(
+                                    box(title = "Choose a Tutorial")
+                              )),
+                      
+                      tabItem(tabName = "r_models", h2("R Models")),
+                      tabItem(tabName = "test_understanding", h2("Test Your Understanding")),
+                      tabItem(tabName = "useful_code", h2("Useful Code"))
                       )
                   )
     )
