@@ -28,6 +28,7 @@ library(shinyBS)
 # Other relevant libraries
 library(tidyverse)
 library(MASS) # For random data generation with exact means 
+library(knitr) # To knit Rmarkdown files
 
 
 
@@ -46,12 +47,6 @@ library(MASS) # For random data generation with exact means
 
 
 source("parameters.R") # Contains all possible parameters for free explore
-
-
-
-
-
-
 
 
 

@@ -22,9 +22,9 @@ generate_data_server <- function(id){
 
       
       # Generate regression data
-      linear_df <- reactive(tibble(x = x(), 
-                                   y = y()))
-      return(linear_df)
+      df <- reactive(tibble(x = x(), 
+                            y = y()))
+      return(df)
       
     }
   )

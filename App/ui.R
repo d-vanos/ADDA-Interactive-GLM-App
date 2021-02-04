@@ -23,7 +23,8 @@ shinyUI(
                                    startExpanded = TRUE,
                                    menuSubItem("Create R Models", tabName = "r_models"),
                                    menuSubItem("Test Your Understanding", tabName = "test_understanding"),
-                                   menuSubItem("Useful Code", tabName = "useful_code"))
+                                   menuSubItem("Useful Code", tabName = "useful_code")),
+                          menuItem("Further Resources", tabName = "resources", icon = icon("book-open"))
                       )
                   ),
                   
@@ -71,7 +72,7 @@ shinyUI(
                                              box(title = "R Model Output",
                                                  width = NULL,
                                                  textOutput("data"),
-                                                 HTML("R Model Output to go here.")
+                                                 HTML("R Model Output to go here (both the specific model output and the linear regression versions).")
                                              )
                                       )
                                       
@@ -89,9 +90,23 @@ shinyUI(
                           
                           tabItem(tabName = "r_models", h2("R Models")),
                           tabItem(tabName = "test_understanding", h2("Test Your Understanding")),
-                          tabItem(tabName = "useful_code", h2("Useful Code"))
+                          tabItem(tabName = "useful_code", h2("Useful Code")),
+                          
+                          ####-------------------####
+                          #### Further Resources ####
+                          ####-------------------####
+                          
+                          tabItem(tabName = "resources", h2("Further Resources"),
+                                  fluidRow(
+                                    column(width = 12, includeMarkdown("resources.md"))
+                                           
+                                           
+                                    )
+                                  )
+                          )
                       )
                   )
-    )
 )
+
+
 
