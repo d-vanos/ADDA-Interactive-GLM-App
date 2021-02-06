@@ -126,7 +126,7 @@ parameters_UI <- function(id) {
       # 2+ groups
       conditionalPanel(
         ns = ns,
-        condition = "input.n_groups == 2 | input.n_groups == 3 | input.n_groups == 4 | input.n_groups == 5",
+        condition = "input.predictor_type == 'Categorical'",
         sliderInput(inputId = ns("mean_1"),
                     label   = "Group 1 Mean",
                     min     = 0,

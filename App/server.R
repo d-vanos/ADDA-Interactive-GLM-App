@@ -5,6 +5,7 @@ shinyServer(function(input, output, session) {
   
   #### Generate data ####
   data <- generate_data_server(id = "parameters") # data is generated in a separate script called dataset_server.R 
+
   
   #### Outputs ####
   # Print dataset 
@@ -16,8 +17,11 @@ shinyServer(function(input, output, session) {
 
   # Print graph
   output$graph <- renderPlot({
-    graph_server(id = "graph_free_explore", data = data)
+    graph_server(id = "graph", 
+                 data = data)
   })
+  
+
 
 
 })

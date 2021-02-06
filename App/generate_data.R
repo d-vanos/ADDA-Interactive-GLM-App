@@ -22,10 +22,17 @@ generate_data_server <- function(id){
 
       
       # Generate regression data
-      df <- reactive(tibble(x = x(), 
-                            y = y()))
+      df <- reactive(
+        tibble(
+          ID = seq.int(from = 1, to = input$sample_size), # need to change this once I add in groups 
+          x = x(), 
+          y = y()
+          ) 
+        )
       return(df)
-      
     }
   )
 }
+
+
+         
