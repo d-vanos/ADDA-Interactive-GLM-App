@@ -12,13 +12,13 @@
 
 
 
-# -----------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #
 # Load libraries 
 # 
 #
-# -----------------------------------------------------------------
+# -------------------------------------------------------------------------
 
 # Note to students: make sure to install these libraries if you 
 # do not already have them installed. You can install a library
@@ -35,6 +35,7 @@ library(shinyBS)
 # Other relevant libraries
 library(tidyverse)
 library(MASS) # For random data generation with exact means 
+library(knitr) # To knit Rmarkdown files
 
 
 
@@ -43,10 +44,45 @@ library(MASS) # For random data generation with exact means
 
 
 
-# -----------------------------------------------------------------
+# -------------------------------------------------------------------------
 #
 #
 # Load scripts for the UI 
 # 
 #
-# -----------------------------------------------------------------
+# -------------------------------------------------------------------------
+
+
+source("parameters.R") # Contains all possible parameters for free explore
+source("model_info.R")
+
+
+
+# -------------------------------------------------------------------------
+#
+#
+# Load scripts for the server 
+# 
+#
+# -------------------------------------------------------------------------
+
+source("generate_data.R") # Generate the data for the table and graph
+source("graph.R") # Create the graph 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
