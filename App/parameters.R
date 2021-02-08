@@ -181,6 +181,7 @@ parameters_UI <- function(id) {
     )
 }
 
+# TO WORK ON: returning multiple reactive values
 # parameters_server <- function(id) {
 #   moduleServer(
 #     id,
