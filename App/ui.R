@@ -48,7 +48,8 @@ shinyUI(
                                      
                                      box(title = "Checking stuff",
                                          width = NULL,
-                                         textOutput("regression_line")),
+                                         textOutput("regression_line"),
+                                         textOutput("sample_size")),
                                      
                                      box(title = "Parameters",
                                          width = NULL,
