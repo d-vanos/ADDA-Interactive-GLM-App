@@ -10,3 +10,9 @@ model_info <- "Information about the model to go here. For example, if it is cat
 - Why (historically) it has been given the name that it has.
 - How it similar to/different from a linear model
 - Assumptions??"
+
+linear_regression <- ""
+t-test <- ""
+one-way_ANOVA <- ""
+factorial_ANOVA <- ""
+logistic_regression <- ""
