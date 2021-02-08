@@ -12,20 +12,17 @@ shinyServer(function(input, output, session) {
     #### Outputs ####
   # Print dataset 
   output$dataset <- renderDataTable(
-    data(), 
+    data(),
     options = list(lengthChange = FALSE,
                    searching = FALSE)
   )
+  #generate_data_server(id = "data")
 
   # Print graph
   graph_server(id = "graph",
                data = data,
                regression = regression)
-  # output$graph <- renderPlot({
-  #   graph_server(id = "graph", 
-  #                data = data,
-  #                regression = regression)
-  # })
+
   
   # Print whether regression line is selected
   output$regression_line <- renderText({
