@@ -8,8 +8,9 @@ graph_UI <- function(id) {
   ns <- NS(id)
 
   tagList(
-
-    plotOutput("graph"),
+    
+    textOutput(ns("regress")),
+    plotOutput(ns("graph_render")),
     column(width = 6,
            textInput(input = ns("y_axis_label"),
                      label = "Y axis label",
@@ -22,22 +23,39 @@ graph_UI <- function(id) {
 }
 
 # Server 
-graph_server <- function(id, data){
+graph_server <- function(id, data, regression){
   moduleServer(
     id,
     function(input, output, session){
       
+      output$regress <- renderText({
+        regression()
+      })
       
-      graph <- ggplot(data = data(), mapping = aes(x = x, y = y)) + 
-        geom_point() + 
-        stat_smooth(method = "lm") + 
-        xlab(label = input$x_axis_label)+ 
-        ylab(label = input$y_axis_label)#+ 
-        # xlim(0, 10) + 
-        # ylim(0, 10)
+      # Select whether regression line is shown based on user input 
+      regression_line_shown <- reactive({
+        
+        # Create the base graph
+        graph <- ggplot(data = data(), mapping = aes(x = x, y = y)) +
+          geom_point() +
+          xlab(label = input$x_axis_label) 
+        
+        # Add a regression line if this is selected, else return the original graph
+        if(regression() == TRUE){
+            graph <- graph + 
+            stat_smooth(method = "lm")
+            return(graph)
+        }
+        else if(regression() == FALSE){
+          return(graph)
+        }
+      })
       
-      return(graph)
-      
+      # Render the graph 
+      output$graph_render <- renderPlot({
+        regression_line_shown()
+      })
+
     }
   )
 }

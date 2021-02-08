@@ -180,3 +180,18 @@ parameters_UI <- function(id) {
       )
     )
 }
+
+parameters_server <- function(id) {
+  moduleServer(
+    id,
+    function(input, output, session){
+      show_regression_line <- reactive(input$show_regression_line)
+      return(show_regression_line)
+    }
+  )
+}
+
+# regression_line <- function(input, output, session){
+#   regression_line <- reactive({input$show_regression_line})
+#   return(regression_line)
+# }

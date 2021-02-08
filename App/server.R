@@ -5,9 +5,11 @@ shinyServer(function(input, output, session) {
   
   #### Generate data ####
   data <- generate_data_server(id = "parameters") # data is generated in a separate script called dataset_server.R 
-
   
-  #### Outputs ####
+  # Import parameters 
+  regression <- parameters_server(id = "parameters")
+
+    #### Outputs ####
   # Print dataset 
   output$dataset <- renderDataTable(
     data(), 
@@ -16,12 +18,17 @@ shinyServer(function(input, output, session) {
   )
 
   # Print graph
-  output$graph <- renderPlot({
-    graph_server(id = "graph", 
-                 data = data)
-  })
+  graph_server(id = "graph",
+               data = data,
+               regression = regression)
+  # output$graph <- renderPlot({
+  #   graph_server(id = "graph", 
+  #                data = data,
+  #                regression = regression)
+  # })
   
-
-
-
+  # Print whether regression line is selected
+  output$regression_line <- renderText({
+    as.character(regression())
+  })
 })

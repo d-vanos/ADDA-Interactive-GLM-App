@@ -3,8 +3,8 @@
 free_explore_UI <- function(id) {
   ns <- NS(id)
   tagList(
-    dataTableOutput("dataset"),
-    plotOutput("graph")
+    dataTableOutput(ns("dataset")),
+    plotOutput(ns("graph"))
   )
 }
 

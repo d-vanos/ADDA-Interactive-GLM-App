@@ -5,6 +5,7 @@
 # # Note: Areas for improvement or other notes are specified using 'DEBUG'.
 
 shinyUI(
+  tagList(
   dashboardPage(skin = "black",
                 dashboardHeader(title = "Exploring the GLM"),
                 dashboardSidebar(
@@ -25,6 +26,15 @@ shinyUI(
                 
                 dashboardBody(
                   
+                  tags$head(tags$style(HTML("
+                  .skin-black .left-side, .skin-black .main-sidebar, .skin-black .wrapper {
+                                            background-color: #012a58;
+                                            }
+                                            .skin-black .sidebar-menu>li>.treeview-menu {
+                                            margin: 0 1px;
+                                            background: #012a58;
+                                            }"))),
+                  
                   tabItems(
                     
                     ####---------------------####
@@ -35,6 +45,10 @@ shinyUI(
                             
                             fluidRow(
                               column(width = 4,
+                                     
+                                     box(title = "Checking stuff",
+                                         width = NULL,
+                                         textOutput("regression_line")),
                                      
                                      box(title = "Parameters",
                                          width = NULL,
@@ -54,9 +68,7 @@ shinyUI(
                                      
                                      box(title = "Model Info",
                                          width = NULL,
-                                         HTML("Information about the model to go here. For example, if it is categorical and has two groups, it is an ANOVA.
-                                            If the outcome variable is categorical, it is likely a logistic regression.
-                                           This section can include info on how models relate to one another, and historical reasons for different names.")),
+                                         HTML(model_info)),
                                      
                                      box(title = "Graph",
                                          width = NULL,
@@ -96,7 +108,14 @@ shinyUI(
                           )
                 )
                 )
+  ),
+  tags$footer("Created for Advanced Design and Data Analysis at the University of Melbourne",
+              align = "center",
+              style = "background-color: #ecf0f5;
+                       height: 30px;")
   )
+  
+
 )
 
 
