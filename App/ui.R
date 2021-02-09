@@ -81,7 +81,7 @@ shinyUI(
                                      
                                      box(title = "Model Info",
                                          width = NULL,
-                                         HTML(model_info)),
+                                         model_info_UI(id = "model_info")),
                                      
                                      box(title = "Graph",
                                          width = NULL,
