@@ -1,4 +1,10 @@
 
+# -----------------------------------------------------------------
+#
+# This module creates the graph, renders it, and displays it on 
+# the 'Visualising the GLM' page. 
+#
+# ----------------------------------------------------------------- 
 
 
 graph_UI <- function(id) {

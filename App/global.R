@@ -55,6 +55,7 @@ library(knitr) # To knit Rmarkdown files
 
 source("parameters.R") # Contains all possible parameters for free explore
 source("model_info.R")
+source("display_data.R")
 
 
 

@@ -1,12 +1,23 @@
-# 
-# # D. J. van Os 
-# # 26/01/2021
-# 
-# # Note: Areas for improvement or other notes are specified using 'DEBUG'.
+
+# -----------------------------------------------------------------
+#
+# This script contains the user interface, or front-end, of the 
+# app. This includes the overall structure, CSS and other 
+# formatting, and various buttons and toggles.
+#
+#
+# Note: Areas for improvement or other notes are specified using
+# 'DEBUG'.
+#
+# ----------------------------------------------------------------- 
+
+
 
 shinyUI(
   tagList(
   dashboardPage(skin = "black",
+                
+                # Overall structure and headings 
                 dashboardHeader(title = "Exploring the GLM"),
                 dashboardSidebar(
                   sidebarMenu(
@@ -26,6 +37,7 @@ shinyUI(
                 
                 dashboardBody(
                   
+                  # CSS styling for colours 
                   tags$head(tags$style(HTML("
                   .skin-black .left-side, .skin-black .main-sidebar, .skin-black .wrapper {
                                             background-color: #012a58;
@@ -37,9 +49,9 @@ shinyUI(
                   
                   tabItems(
                     
-                    ####---------------------####
-                    #### Visualising the GLM ####
-                    ####---------------------####
+                    ####--------------------------####
+                    #### Tab: Visualising the GLM ####
+                    ####--------------------------####
                     
                     tabItem(tabName = "free_explore", h2("Visualising General Linear Models"),
                             
@@ -57,8 +69,7 @@ shinyUI(
                                      ),
                                      box(title = "Dataset",
                                          width = NULL,
-                                         dataTableOutput("dataset")
-                                         #generate_data_UI(id = "dataset")
+                                         display_data_UI(id = "dataset")
                                      )
                               ),
                               
@@ -111,6 +122,8 @@ shinyUI(
                 )
                 )
   ),
+  
+  # Footer 
   tags$footer("Created for Advanced Design and Data Analysis at the University of Melbourne",
               align = "center",
               style = "background-color: #ecf0f5;

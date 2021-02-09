@@ -1,15 +1,13 @@
 
 
-# generate_data_UI <- function(id) {
-# 
-#   # `NS(id)` returns a namespace function, which was save as `ns` and will
-#   # invoke later.
-#   ns <- NS(id)
-# 
-#   tagList(
-#     dataTableOutput(ns("dataset"))
-#   )
-# }
+
+# -----------------------------------------------------------------
+#
+# This module generates data based on user inputs.
+# This module is called in the main script and used in generating
+# the datatable and creating the graph. 
+#
+# ----------------------------------------------------------------- 
 
 generate_data_server <- function(id){
   moduleServer(
@@ -43,17 +41,7 @@ generate_data_server <- function(id){
           )
         })
       
-      ### Render Table ####
-      # output$dataset <- renderDataTable(
-      #   data(),
-      #   options = list(lengthChange = FALSE,
-      #                  searching = FALSE)
-      # )
-      
       return(df)
     }
   )
 }
-
-
-         
