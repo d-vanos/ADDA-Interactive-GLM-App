@@ -42,12 +42,5 @@ shinyServer(function(input, output, session) {
   #### Debugging/Checking stuff ####
   ####--------------------------####
   
-  # Print whether regression line is selected
-  output$regression_line <- renderText({
-    paste0("Regression line selected: ", as.character(parameters$show_regression_line()))
-  })
-  
-  output$sample_size <- renderText({
-    paste0("Sample size: ", as.character(parameters$sample_size()))
-  })
+  debug_server(id = "debug", parameters = parameters)
 })

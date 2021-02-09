@@ -15,7 +15,6 @@ graph_UI <- function(id) {
 
   tagList(
     
-    textOutput(ns("regress")),
     plotOutput(ns("graph_render")),
     column(width = 6,
            textInput(input = ns("y_axis_label"),
@@ -33,10 +32,6 @@ graph_server <- function(id, data, regression){
   moduleServer(
     id,
     function(input, output, session){
-      
-      output$regress <- renderText({
-        regression()
-      })
       
       # Select whether regression line is shown based on user input 
       regression_line_shown <- reactive({
