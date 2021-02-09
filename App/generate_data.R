@@ -17,7 +17,9 @@ generate_data_server <- function(id){
       # Generate x axis 
       x_axis <- reactive(
         if(input$predictor_type == "Categorical"){
-          x <- as_factor(rep(c(0, 1, 2), each = input$sample_size))
+          
+          # Creating a list of values from 0 to 1 less than the number of groups, and repeating it as many times as the sample size per group
+          x <- rep(c(seq.int(from = 0, to = input$n_groups-1)), each = input$sample_size)
           return(x)
         }
         
@@ -66,6 +68,18 @@ generate_data_server <- function(id){
         }
       })
       
+      # Generate ID 
+      ID <- reactive({
+        if(input$predictor_type == "Categorical"){
+          ID <- seq.int(from = 1, to = input$sample_size*input$n_groups)
+          return(ID)
+        }
+        
+        else if(input$predictor_type == "Continuous"){
+          ID <- seq.int(from = 1, to = input$sample_size)
+        }
+      })
+      
       # y <- reactive(
       #   round(input$intercept + input$slope*x() + mvrnorm(n = input$sample_size,
       #                                           mu = 0, Sigma = input$variance,
@@ -77,7 +91,7 @@ generate_data_server <- function(id){
       # Generate regression data
       df <- reactive({
         tibble(
-          ID = seq.int(from = 1, to = input$sample_size), # need to change this once I add in groups
+          ID = ID(), 
           x = x_axis(),
           y = y_axis()
           )

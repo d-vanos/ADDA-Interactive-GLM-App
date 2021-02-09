@@ -28,35 +28,46 @@ graph_UI <- function(id) {
 }
 
 # Server 
-graph_server <- function(id, data, regression){
+graph_server <- function(id, data, regression, predictor_type){
   moduleServer(
     id,
     function(input, output, session){
       
       # Select whether regression line is shown based on user input 
-      regression_line_shown <- reactive({
+      graph <- reactive({
         
         # Create the base graph
         graph <- ggplot(data = data(), mapping = aes(x = x, y = y)) +
           geom_point() +
-          xlab(label = input$x_axis_label) +
-          xlim(-7, 7) + 
-          ylim(-20, 20)
+          xlab(label = input$x_axis_label) + 
+          ylim(0, 20)
         
         # Add a regression line if this is selected, else return the original graph
         if(regression() == TRUE){
             graph <- graph + 
             stat_smooth(method = "lm")
-            return(graph)
+            
         }
-        else if(regression() == FALSE){
-          return(graph)
+        
+        # Add x range
+        if(predictor_type() == 'Continuous'){
+          graph <- graph +
+            xlim(-7, 7)
+          
         }
+        else if (predictor_type() == 'Categorical'){
+          graph <- graph +
+            xlim(0, 4)
+          
+
+        }
+        
+        return(graph)
       })
       
       # Render the graph 
       output$graph_render <- renderPlot({
-        regression_line_shown()
+        graph()
       })
 
     }
