@@ -4,7 +4,8 @@
 shinyServer(function(input, output, session) {
   
   #### Generate data ####
-  data <- generate_data_server(id = "parameters") # data is generated in a separate script called dataset_server.R 
+  data <- generate_data_server(id = "parameters") 
+
   
   # Import parameters 
   parameters <- parameters_server(id = "parameters")
@@ -16,7 +17,6 @@ shinyServer(function(input, output, session) {
     options = list(lengthChange = FALSE,
                    searching = FALSE)
   )
-  #generate_data_server(id = "data")
 
   # Print graph
   graph_server(id = "graph",

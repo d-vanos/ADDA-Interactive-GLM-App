@@ -65,7 +65,7 @@ parameters_UI <- function(id) {
       sliderInput(inputId = ns("variance"),
                   label   = NULL,
                   min     = 0,
-                  max     = 3, # Consider changing this - fiddle with it 
+                  max     = 10, # Consider changing this - fiddle with it 
                   value   = 1, 
                   step    = 0.01)
     ),
@@ -113,9 +113,10 @@ parameters_UI <- function(id) {
       
       sliderInput(inputId = ns("slope"),
                   label = "Slope",
-                  min = -3,
-                  max = +3,
-                  value = 0)
+                  min = -7,
+                  max = +7,
+                  value = 0, 
+                  step = 0.1)
     ),
     
     

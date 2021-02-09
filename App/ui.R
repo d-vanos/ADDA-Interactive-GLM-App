@@ -46,10 +46,10 @@ shinyUI(
                             fluidRow(
                               column(width = 4,
                                      
-                                     box(title = "Checking stuff",
-                                         width = NULL,
-                                         textOutput("regression_line"),
-                                         textOutput("sample_size")),
+                                     # box(title = "Checking stuff",
+                                     #     width = NULL,
+                                     #     textOutput("regression_line"),
+                                     #     textOutput("sample_size")),
                                      
                                      box(title = "Parameters",
                                          width = NULL,
@@ -58,6 +58,7 @@ shinyUI(
                                      box(title = "Dataset",
                                          width = NULL,
                                          dataTableOutput("dataset")
+                                         #generate_data_UI(id = "dataset")
                                      )
                               ),
                               
