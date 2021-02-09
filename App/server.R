@@ -36,18 +36,11 @@ shinyServer(function(input, output, session) {
   display_data_server(id = "dataset", data = data)
 
   # Print graph
-  graph_server(id = "graph", data = data, regression = parameters$show_regression_line)
+  graph_server(id = "graph", data = data, regression = parameters$show_regression_line, predictor_type = parameters$predictor_type)
 
   ####--------------------------####
   #### Debugging/Checking stuff ####
   ####--------------------------####
   
-  # Print whether regression line is selected
-  output$regression_line <- renderText({
-    paste0("Regression line selected: ", as.character(parameters$show_regression_line()))
-  })
-  
-  output$sample_size <- renderText({
-    paste0("Sample size: ", as.character(parameters$sample_size()))
-  })
+  debug_server(id = "debug", parameters = parameters)
 })
