@@ -14,17 +14,6 @@ generate_data_server <- function(id){
     id,
     function(input, output, session) {
       
-<<<<<<< Updated upstream
-      #### Generate data ### 
-      # Generate axes
-      x <- reactive(
-        round(mvrnorm(n = input$sample_size, 
-                            mu = 0, 
-                            Sigma = input$variance, 
-                            empirical = TRUE),
-          digits = 2)
-        )
-=======
       # Generate x axis 
       x_axis <- reactive(
         if(input$predictor_type == "Categorical"){
@@ -35,12 +24,12 @@ generate_data_server <- function(id){
         }
         
         else if(input$predictor_type == "Continuous"){
-        x <- round(mvrnorm(n = input$sample_size, 
-                      mu = 0, 
-                      Sigma = input$variance, 
-                      empirical = TRUE),
-              digits = 2)
-        return(x)
+          x <- round(mvrnorm(n = input$sample_size, 
+                             mu = 0, 
+                             Sigma = input$variance, 
+                             empirical = TRUE),
+                     digits = 2)
+          return(x)
         }
       )
       
@@ -71,31 +60,35 @@ generate_data_server <- function(id){
         # Continuous IV
         else if(input$predictor_type == "Continuous"){
           y <- round(input$intercept + input$slope*x_axis() + mvrnorm(n = input$sample_size,
-                                                            mu = 0, Sigma = input$variance,
-                                                            empirical = TRUE),
-                digits = 2)
+                                                                      mu = 0, Sigma = input$variance,
+                                                                      empirical = TRUE),
+                     digits = 2)
           
           return(y)
         }
       })
->>>>>>> Stashed changes
       
-      y <- reactive(
-        round(input$intercept + input$slope*x() + mvrnorm(n = input$sample_size,
-                                                mu = 0, Sigma = input$variance,
-                                                empirical = TRUE),
-        digits = 2)
-      )
-
+      # Generate ID 
+      ID <- reactive({
+        if(input$predictor_type == "Categorical"){
+          ID <- seq.int(from = 1, to = input$sample_size*input$n_groups)
+          return(ID)
+        }
+        
+        else if(input$predictor_type == "Continuous"){
+          ID <- seq.int(from = 1, to = input$sample_size)
+        }
+      })
+      
       
       # Generate regression data
       df <- reactive({
         tibble(
-          ID = seq.int(from = 1, to = input$sample_size), # need to change this once I add in groups
-          x = x(),
-          y = y()
-          )
-        })
+          ID = ID(), 
+          x = x_axis(),
+          y = y_axis()
+        )
+      })
       
       return(df)
     }
