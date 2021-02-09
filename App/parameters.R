@@ -84,7 +84,7 @@ parameters_UI <- function(id) {
       sliderInput(inputId = ns("within_groups_variance"),
                   label   = "Within-groups Variance",
                   min     = 0,
-                  max     = 3, 
+                  max     = 10, 
                   value   = 1, 
                   step    = 0.01),
       
