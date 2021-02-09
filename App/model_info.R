@@ -11,8 +11,8 @@ model_info <- "Information about the model to go here. For example, if it is cat
 - How it similar to/different from a linear model
 - Assumptions??"
 
-linear_regression <- ""
-t-test <- ""
-one-way_ANOVA <- ""
-factorial_ANOVA <- ""
-logistic_regression <- ""
+linear_regression <- "to complete"
+t_test <- "to complete"
+one_way_ANOVA <- "to complete"
+factorial_ANOVA <- "to complete"
+logistic_regression <- "to complete"
