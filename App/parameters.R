@@ -194,8 +194,22 @@ parameters_server <- function(id) {
     id,
     function(input, output, session){
       return(
-        list(show_regression_line = reactive(input$show_regression_line),
-             sample_size = reactive(input$sample_size)
+        list(predictor_type = reactive(input$predictor_type),
+             n_groups = reactive(input$n_groups),
+             outcome_type = reactive(input$outcome_type),
+             n_response_options = reactive(input$n_response_options),
+             show_regression_line = reactive(input$show_regression_line),
+             sample_size = reactive(input$sample_size),
+             variance = reactive(input$variance),
+             within_groups_variance = reactive(input$within_groups_variance),
+             between_groups_variance = reactive(input$between_groups_variance),
+             intercept = reactive(input$intercept),
+             slope = reactive(input$slope),
+             mean_1 = reactive(input$mean_1),
+             mean_2 = reactive(input$mean_2),
+             mean_3 = reactive(input$mean_3),
+             mean_4 = reactive(input$mean_4),
+             mean_5 = reactive(input$mean_5)
              )
         )
     }
