@@ -109,9 +109,9 @@ parameters_UI <- function(id) {
       
       sliderInput(inputId = ns("intercept"),
                   label = "Intercept",
-                  min = -10,
-                  max = +10,
-                  value = 0),
+                  min = 0,
+                  max = +20,
+                  value = +10),
       
       bsTooltip(id = ns("intercept"), 
                 title = "The intercept is the value of the y-axis when x = 0. When your predictor variable is continuous, the intercept is the mean value of the first group, which is known as the reference group.", 
@@ -137,16 +137,16 @@ parameters_UI <- function(id) {
         sliderInput(inputId = ns("mean_1"),
                     label   = "Group 1 Mean",
                     min     = 0,
-                    max     = 100, 
-                    value   = 50, 
-                    step    = 1),
+                    max     = 20, 
+                    value   = 10, 
+                    step    = 0.5),
         
         sliderInput(inputId = ns("mean_2"),
                     label   = "Group 2 Mean",
                     min     = 0,
-                    max     = 100, 
-                    value   = 50, 
-                    step    = 1),
+                    max     = 20, 
+                    value   = 10, 
+                    step    = 0.5),
         
       ),
       
@@ -157,9 +157,9 @@ parameters_UI <- function(id) {
         sliderInput(inputId = ns("mean_3"),
                     label   = "Group 3 Mean",
                     min     = 0,
-                    max     = 100,
-                    value   = 50,
-                    step    = 1),
+                    max     = 20,
+                    value   = 10,
+                    step    = 0.5),
       ),
       
       # 4+ groups
@@ -169,9 +169,9 @@ parameters_UI <- function(id) {
         sliderInput(inputId = ns("mean_4"),
                     label   = "Group 4 Mean",
                     min     = 0,
-                    max     = 100,
-                    value   = 50,
-                    step    = 1),
+                    max     = 20,
+                    value   = 10,
+                    step    = 0.5),
       ),
       
       # 5 groups
@@ -181,9 +181,9 @@ parameters_UI <- function(id) {
         sliderInput(inputId = ns("mean_5"),
                     label   = "Group 5 Mean",
                     min     = 0,
-                    max     = 100,
-                    value   = 50,
-                    step    = 1)
+                    max     = 20,
+                    value   = 10,
+                    step    = 0.5)
       )
     )
 }
@@ -194,8 +194,22 @@ parameters_server <- function(id) {
     id,
     function(input, output, session){
       return(
-        list(show_regression_line = reactive(input$show_regression_line),
-             sample_size = reactive(input$sample_size)
+        list(predictor_type = reactive(input$predictor_type),
+             n_groups = reactive(input$n_groups),
+             outcome_type = reactive(input$outcome_type),
+             n_response_options = reactive(input$n_response_options),
+             show_regression_line = reactive(input$show_regression_line),
+             sample_size = reactive(input$sample_size),
+             variance = reactive(input$variance),
+             within_groups_variance = reactive(input$within_groups_variance),
+             between_groups_variance = reactive(input$between_groups_variance),
+             intercept = reactive(input$intercept),
+             slope = reactive(input$slope),
+             mean_1 = reactive(input$mean_1),
+             mean_2 = reactive(input$mean_2),
+             mean_3 = reactive(input$mean_3),
+             mean_4 = reactive(input$mean_4),
+             mean_5 = reactive(input$mean_5)
              )
         )
     }
