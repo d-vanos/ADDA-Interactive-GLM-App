@@ -1,9 +1,15 @@
 
+# -----------------------------------------------------------------
+#
+# This module contains all the buttons in the parameter box on the
+# page 'Visualising the GLM', and returns these values. 
+#
+# ----------------------------------------------------------------- 
+
 
 parameters_UI <- function(id) {
   
-  # `NS(id)` returns a namespace function, which was save as `ns` and will
-  # invoke later.
+  # `NS(id)` returns a namespace function, which is saved as `ns` and will be invoked later.
   ns <- NS(id)
   
   tagList(
@@ -37,7 +43,7 @@ parameters_UI <- function(id) {
                    label   = "Number of response options",
                    value   = 2, 
                    min     = 1, 
-                   max     = 4), # Could be higher but that might make it difficult to select means for each group
+                   max     = 4), 
     ),
     bsTooltip(id = ns("n_response_options"), 
               title = "The maximum number of response options in this app is 4, but in reality you can have many more response options.", 

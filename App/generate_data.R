@@ -1,15 +1,13 @@
-# 
-# 
-# generate_data_UI <- function(id) {
-#   
-#   # `NS(id)` returns a namespace function, which was save as `ns` and will
-#   # invoke later.
-#   ns <- NS(id)
-#   
-#   tagList(
-#     dataTableOutput(ns("dataset"))
-#   )
-# }
+
+
+# -----------------------------------------------------------------
+#
+# This module generates data based on user inputs.
+# This module is called in the main script and used in generating
+# the datatable and creating the graph. 
+#
+# ----------------------------------------------------------------- 
+
 
 generate_data_server <- function(id){
   moduleServer(
@@ -35,25 +33,15 @@ generate_data_server <- function(id){
 
       
       # Generate regression data
-      df <- reactive(
+      df <- reactive({
         tibble(
-          ID = seq.int(from = 1, to = input$sample_size), # need to change this once I add in groups 
-          x = x(), 
+          ID = seq.int(from = 1, to = input$sample_size), # need to change this once I add in groups
+          x = x(),
           y = y()
-          ) 
-        )
-      
-      #### Render Table ####
-      # output$dataset <- renderDataTable(
-      #   df(), 
-      #   options = list(lengthChange = FALSE,
-      #                  searching = FALSE)
-      # )
+          )
+        })
       
       return(df)
     }
   )
 }
-
-
-         
