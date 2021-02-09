@@ -20,6 +20,13 @@
 #
 # -------------------------------------------------------------------------
 
+# Note to students: make sure to install these libraries if you 
+# do not already have them installed. You can install a library
+# like this: 
+
+# install.packages("shiny")
+
+
 # Shiny libraries
 library(shiny)
 library(shinydashboard)

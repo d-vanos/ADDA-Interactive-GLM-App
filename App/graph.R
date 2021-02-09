@@ -44,7 +44,9 @@ graph_server <- function(id, data, regression){
         # Create the base graph
         graph <- ggplot(data = data(), mapping = aes(x = x, y = y)) +
           geom_point() +
-          xlab(label = input$x_axis_label) 
+          xlab(label = input$x_axis_label) +
+          xlim(-7, 7) + 
+          ylim(-20, 20)
         
         # Add a regression line if this is selected, else return the original graph
         if(regression() == TRUE){

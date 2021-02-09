@@ -14,9 +14,13 @@
 
 shinyServer(function(input, output, session) {
   
+
   ####---------------------------####
   #### Generate global variables ####
   ####---------------------------####
+
+  #### Generate data ####
+  data <- generate_data_server(id = "parameters") 
   
   # Parameters 
   parameters <- parameters_server(id = "parameters")

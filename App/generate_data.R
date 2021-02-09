@@ -1,5 +1,6 @@
 
 
+
 # -----------------------------------------------------------------
 #
 # This module generates data based on user inputs.
@@ -7,7 +8,6 @@
 # the datatable and creating the graph. 
 #
 # ----------------------------------------------------------------- 
-
 
 generate_data_server <- function(id){
   moduleServer(

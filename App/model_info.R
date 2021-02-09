@@ -10,10 +10,17 @@
 
 model_info <- "Information about the model to go here. For example, if it is categorical and has two groups, it is an ANOVA.
               If the outcome variable is categorical, it is likely a logistic regression.
-              This section can include info on how models relate to one another, and historical reasons for different names."
+
+              This section can include info on how models relate to one another, and historical reasons for different names.
+- The name of the model (e.g., t-test, ANOVA)
+- What makes it that type of model (e.g., categorical, 2 categories)
+- Why (historically) it has been given the name that it has.
+- How it similar to/different from a linear model
+- Assumptions??"
 
 linear_regression <- "to complete"
 t_test <- "to complete"
 one_way_ANOVA <- "to complete"
 factorial_ANOVA <- "to complete"
 logistic_regression <- "to complete"
+
