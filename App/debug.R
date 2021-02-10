@@ -12,7 +12,7 @@ debug_UI <- function(id) {
     uiOutput(ns("means")),
     textOutput(ns("predictor_type")),
     textOutput(ns("mean")),
-    mean_UI(id = ns("mean_0"), label = "Checking dem means")
+    mean_slider_UI(id = ns("mean_0"), label = "Checking dem means")
     
   )
 }
@@ -54,7 +54,7 @@ debug_server <- function(id, parameters){
       })
       
       # Means
-      mean_0 <- mean_server(id = "mean_0")
+      mean_0 <- mean_slider_server(id = "mean_0")
       
       output$mean <- renderText({
         paste0("Mean_0 mean: ", mean_0())

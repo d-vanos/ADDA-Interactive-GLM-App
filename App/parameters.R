@@ -138,8 +138,8 @@ parameters_UI <- function(id) {
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1",
 
-        mean_UI(id = ns("mean_1"), label = "Group 1"),
-        mean_UI(id = ns("mean_2"), label = "Group 2"),
+        mean_slider_UI(id = ns("mean_1"), label = "Group 1"),
+        mean_slider_UI(id = ns("mean_2"), label = "Group 2"),
         
       ),
       
@@ -148,23 +148,31 @@ parameters_UI <- function(id) {
         ns = ns,
         condition = "input.n_groups == 3 | input.n_groups == 4 | input.n_groups == 5 & input.n_variables == 1",
         
-        mean_UI(id = ns("mean_3"), label = "Group 3"),
+        mean_slider_UI(id = ns("mean_3"), label = "Group 3"),
       ),
       
       # 4+ groups
       conditionalPanel(
         ns = ns,
         condition = "input.n_groups == 4 | input.n_groups == 5 & input.n_variables == 1",
-        mean_UI(id = ns("mean_4"), label = "Group 4"),
+        mean_slider_UI(id = ns("mean_4"), label = "Group 4"),
       ),
       
       # 5 groups
       conditionalPanel(
         ns = ns,
         condition = "input.n_groups == 5  & input.n_variables == 1",
-        mean_UI(id = ns("mean_5"), label = "Group 5"),
-      )
+        mean_slider_UI(id = ns("mean_5"), label = "Group 5"),
+      ),
+    
+    # Factorial/2-way ANOVA
+    conditionalPanel(
+      ns = ns,
+      condition = "input.predictor_type == 'Categorical'  & input.n_variables == 2",
+      
+      uiOutput(ns("means_factorial_anova"))
     )
+  )
 }
 
 # TO WORK ON: returning multiple reactive values
@@ -172,6 +180,37 @@ parameters_server <- function(id) {
   moduleServer(
     id,
     function(input, output, session){
+      
+      # Make the column size for factorial ANOVA depend on the number of groups selected
+      output$means_factorial_anova <- renderUI(
+        div(
+          fluidRow(
+            column(width = 12, align = "center",
+                          HTML("<b> Variable 1 </b> "))),
+          fluidRow(
+            column(width = 12/input$n_groups,
+                          if(input$n_groups %in% c(2, 3)){
+                            list(HTML("<b> Check </b>"),
+                                 mean_slider_UI(id = "var_1_group_1", label = "Variable 1 Group 1"),
+                                 mean_slider_UI(id = "var_1_group_2", label = "Variable 1 Group 2")
+                            )
+                            
+                          },
+                          if(input$n_groups == 3){
+                            mean_slider_UI(id = "var_1_group_3", label = "Variable 1 Group 3")
+                          }
+          ),
+          column(width = 12/input$n_groups)
+          )
+        )
+      )
+      
+      # output$var_2_groups <- renderUI(
+      #   column(width = 6,
+      #          mean_numeric_UI(id = "var_2_group_1", label = "Variable 2 Group 1"),
+      #          mean_numeric_UI(id = "var_2_group_2", label = "Variable 2 Group 2")
+      #   )
+      # )
       
       return(
         list(predictor_type = reactive(input$predictor_type),
@@ -186,11 +225,11 @@ parameters_server <- function(id) {
              between_groups_variance = reactive(input$between_groups_variance),
              intercept = reactive(input$intercept),
              slope = reactive(input$slope),
-             mean_1 = mean_server(id = "mean_1"),
-             mean_2 = mean_server(id = "mean_2"),
-             mean_3 = mean_server(id = "mean_3"),
-             mean_4 = mean_server(id = "mean_4"),
-             mean_5 = mean_server(id = "mean_5")
+             mean_1 = mean_slider_server(id = "mean_1"),
+             mean_2 = mean_slider_server(id = "mean_2"),
+             mean_3 = mean_slider_server(id = "mean_3"),
+             mean_4 = mean_slider_server(id = "mean_4"),
+             mean_5 = mean_slider_server(id = "mean_5")
              )
         )
     }
