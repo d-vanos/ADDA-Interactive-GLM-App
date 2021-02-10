@@ -133,16 +133,13 @@ parameters_UI <- function(id) {
     
     
     
-    # Selection options if the predictor type is categorical
-      # Various group sizes - DEBUG: figure out how to make this code more efficient
-      # 1 group - type of t-test 
-      # 2+ groups
+    # Selection options if the predictor type is categorical and there is only 1 variable
       conditionalPanel(
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1",
 
-        mean_UI(id = ns("mean_1"), label = "Group 1 Mean check check check!!"),
-        mean_UI(id = ns("mean_2"), label = "Group 2!!"),
+        mean_UI(id = ns("mean_1"), label = "Group 1"),
+        mean_UI(id = ns("mean_2"), label = "Group 2"),
         
       ),
       
@@ -152,12 +149,6 @@ parameters_UI <- function(id) {
         condition = "input.n_groups == 3 | input.n_groups == 4 | input.n_groups == 5 & input.n_variables == 1",
         
         mean_UI(id = ns("mean_3"), label = "Group 3"),
-        # sliderInput(inputId = ns("mean_3"),
-        #             label   = "Group 3 Mean",
-        #             min     = 0,
-        #             max     = 20,
-        #             value   = 10,
-        #             step    = 0.5),
       ),
       
       # 4+ groups
@@ -165,12 +156,6 @@ parameters_UI <- function(id) {
         ns = ns,
         condition = "input.n_groups == 4 | input.n_groups == 5 & input.n_variables == 1",
         mean_UI(id = ns("mean_4"), label = "Group 4"),
-        # sliderInput(inputId = ns("mean_4"),
-        #             label   = "Group 4 Mean",
-        #             min     = 0,
-        #             max     = 20,
-        #             value   = 10,
-        #             step    = 0.5),
       ),
       
       # 5 groups
@@ -178,12 +163,6 @@ parameters_UI <- function(id) {
         ns = ns,
         condition = "input.n_groups == 5  & input.n_variables == 1",
         mean_UI(id = ns("mean_5"), label = "Group 5"),
-        # sliderInput(inputId = ns("mean_5"),
-        #             label   = "Group 5 Mean",
-        #             min     = 0,
-        #             max     = 20,
-        #             value   = 10,
-        #             step    = 0.5)
       )
     )
 }
