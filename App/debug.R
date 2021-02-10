@@ -10,7 +10,10 @@ debug_UI <- function(id) {
     textOutput(ns("regression_line")),
     textOutput(ns("sample_size")),
     uiOutput(ns("means")),
-    textOutput(ns("predictor_type"))
+    textOutput(ns("predictor_type")),
+    textOutput(ns("mean")),
+    mean_UI(id = ns("mean_0"), label = "Checking dem means")
+    
   )
 }
 
@@ -48,6 +51,13 @@ debug_server <- function(id, parameters){
       # Predictor type
       output$predictor_type <- renderText({
         paste0("Predictor type: ", as.character(parameters$predictor_type()))
+      })
+      
+      # Means
+      mean_0 <- mean_server(id = "mean_0")
+      
+      output$mean <- renderText({
+        paste0("Mean_0 mean: ", mean_0())
       })
     }
   )

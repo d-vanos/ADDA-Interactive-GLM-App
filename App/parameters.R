@@ -29,6 +29,12 @@ parameters_UI <- function(id) {
                    value   = 2, 
                    min     = 2, 
                    max     = 5), # Could be higher but that might make it difficult to select means for each group
+      
+      numericInput(inputId = ns("n_variables"),
+                   label   = "Number of predictor variables",
+                   value   = 1, 
+                   min     = 1, 
+                   max     = 2),
     ),
     radioButtons(inputId = ns("outcome_type"), 
                  label = "Outcome Variable Type",
@@ -133,57 +139,51 @@ parameters_UI <- function(id) {
       # 2+ groups
       conditionalPanel(
         ns = ns,
-        condition = "input.predictor_type == 'Categorical'",
-        sliderInput(inputId = ns("mean_1"),
-                    label   = "Group 1 Mean",
-                    min     = 0,
-                    max     = 20, 
-                    value   = 10, 
-                    step    = 0.5),
-        
-        sliderInput(inputId = ns("mean_2"),
-                    label   = "Group 2 Mean",
-                    min     = 0,
-                    max     = 20, 
-                    value   = 10, 
-                    step    = 0.5),
+        condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1",
+
+        mean_UI(id = ns("mean_1"), label = "Group 1 Mean check check check!!"),
+        mean_UI(id = ns("mean_2"), label = "Group 2!!"),
         
       ),
       
       # 3+ groups
       conditionalPanel(
         ns = ns,
-        condition = "input.n_groups == 3 | input.n_groups == 4 | input.n_groups == 5",
-        sliderInput(inputId = ns("mean_3"),
-                    label   = "Group 3 Mean",
-                    min     = 0,
-                    max     = 20,
-                    value   = 10,
-                    step    = 0.5),
+        condition = "input.n_groups == 3 | input.n_groups == 4 | input.n_groups == 5 & input.n_variables == 1",
+        
+        mean_UI(id = ns("mean_3"), label = "Group 3"),
+        # sliderInput(inputId = ns("mean_3"),
+        #             label   = "Group 3 Mean",
+        #             min     = 0,
+        #             max     = 20,
+        #             value   = 10,
+        #             step    = 0.5),
       ),
       
       # 4+ groups
       conditionalPanel(
         ns = ns,
-        condition = "input.n_groups == 4 | input.n_groups == 5",
-        sliderInput(inputId = ns("mean_4"),
-                    label   = "Group 4 Mean",
-                    min     = 0,
-                    max     = 20,
-                    value   = 10,
-                    step    = 0.5),
+        condition = "input.n_groups == 4 | input.n_groups == 5 & input.n_variables == 1",
+        mean_UI(id = ns("mean_4"), label = "Group 4"),
+        # sliderInput(inputId = ns("mean_4"),
+        #             label   = "Group 4 Mean",
+        #             min     = 0,
+        #             max     = 20,
+        #             value   = 10,
+        #             step    = 0.5),
       ),
       
       # 5 groups
       conditionalPanel(
         ns = ns,
-        condition = "input.n_groups == 5",
-        sliderInput(inputId = ns("mean_5"),
-                    label   = "Group 5 Mean",
-                    min     = 0,
-                    max     = 20,
-                    value   = 10,
-                    step    = 0.5)
+        condition = "input.n_groups == 5  & input.n_variables == 1",
+        mean_UI(id = ns("mean_5"), label = "Group 5"),
+        # sliderInput(inputId = ns("mean_5"),
+        #             label   = "Group 5 Mean",
+        #             min     = 0,
+        #             max     = 20,
+        #             value   = 10,
+        #             step    = 0.5)
       )
     )
 }
@@ -193,9 +193,11 @@ parameters_server <- function(id) {
   moduleServer(
     id,
     function(input, output, session){
+      
       return(
         list(predictor_type = reactive(input$predictor_type),
              n_groups = reactive(input$n_groups),
+             n_variables = reactive(input$n_variables),
              outcome_type = reactive(input$outcome_type),
              n_response_options = reactive(input$n_response_options),
              show_regression_line = reactive(input$show_regression_line),
@@ -205,11 +207,11 @@ parameters_server <- function(id) {
              between_groups_variance = reactive(input$between_groups_variance),
              intercept = reactive(input$intercept),
              slope = reactive(input$slope),
-             mean_1 = reactive(input$mean_1),
-             mean_2 = reactive(input$mean_2),
-             mean_3 = reactive(input$mean_3),
-             mean_4 = reactive(input$mean_4),
-             mean_5 = reactive(input$mean_5)
+             mean_1 = mean_server(id = "mean_1"),
+             mean_2 = mean_server(id = "mean_2"),
+             mean_3 = mean_server(id = "mean_3"),
+             mean_4 = mean_server(id = "mean_4"),
+             mean_5 = mean_server(id = "mean_5")
              )
         )
     }

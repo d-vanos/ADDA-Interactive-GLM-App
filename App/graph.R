@@ -38,8 +38,9 @@ graph_server <- function(id, data, regression, predictor_type){
         
         # Create the base graph
         graph <- ggplot(data = data(), mapping = aes(x = x, y = y)) +
-          geom_point() +
-          xlab(label = input$x_axis_label) + 
+          geom_point(colour = "red") +
+          xlab(label = input$x_axis_label) +
+          ylab(label = input$y_axis_label) + 
           ylim(0, 20)
         
         # Add a regression line if this is selected, else return the original graph
