@@ -137,7 +137,6 @@ parameters_UI <- function(id) {
       conditionalPanel(
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1",
-
         mean_slider_UI(id = ns("mean_1"), label = "Group 1"),
         mean_slider_UI(id = ns("mean_2"), label = "Group 2"),
         
@@ -146,7 +145,7 @@ parameters_UI <- function(id) {
       # 3+ groups
       conditionalPanel(
         ns = ns,
-        condition = "input.n_groups == 3 | input.n_groups == 4 | input.n_groups == 5 & input.n_variables == 1",
+        condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1 & (input.n_groups == 3 | input.n_groups == 4 | input.n_groups == 5)",
         
         mean_slider_UI(id = ns("mean_3"), label = "Group 3"),
       ),
@@ -154,14 +153,14 @@ parameters_UI <- function(id) {
       # 4+ groups
       conditionalPanel(
         ns = ns,
-        condition = "input.n_groups == 4 | input.n_groups == 5 & input.n_variables == 1",
+        condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1 & (input.n_groups == 4 | input.n_groups == 5)",
         mean_slider_UI(id = ns("mean_4"), label = "Group 4"),
       ),
       
       # 5 groups
       conditionalPanel(
         ns = ns,
-        condition = "input.n_groups == 5  & input.n_variables == 1",
+        condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1 & input.n_groups == 5",
         mean_slider_UI(id = ns("mean_5"), label = "Group 5"),
       ),
     
@@ -170,48 +169,102 @@ parameters_UI <- function(id) {
       ns = ns,
       condition = "input.predictor_type == 'Categorical'  & input.n_variables == 2",
       
+      
+      HTML("<b> Means <br>
+           <center> Variable 1 </center> </b>"),
+      
       uiOutput(ns("means_factorial_anova"))
     )
+    
   )
 }
 
+matrix(nrow = 3, ncol = 3, data = 0) %>% 
+  colnames(.) 
 # TO WORK ON: returning multiple reactive values
 parameters_server <- function(id) {
   moduleServer(
     id,
     function(input, output, session){
       
-      # Make the column size for factorial ANOVA depend on the number of groups selected
+      mat <- reactive({
+        # Make the column size for factorial ANOVA depend on the number of groups selected
+        # Only presenting means for 2 groups per variable 
+        if(input$n_groups == 2){
+          mat <- matrix(nrow = 2, ncol = 2, data = 0)
+          colnames(mat) <- c("Group 1", "Group 2")
+          rownames(mat) <- c("Group 1", "Group 2")
+        }
+
+        #  Only presenting means for 3 groups per variable
+        else if(input$n_groups == 3){
+          mat <- matrix(nrow = 3, ncol = 3, data = 0)
+          colnames(mat) <- c("Group 1", "Group 2", "Group 3")
+          rownames(mat) <- c("Group 1", "Group 2", "Group 3")
+        }
+        
+        #  Only presenting means for 4 groups per variable
+        else if(input$n_groups == 4){
+          mat <- matrix(nrow = 4, ncol = 4, data = 0)
+          colnames(mat) <- c("Group 1", "Group 2", "Group 3", "Group 4")
+          rownames(mat) <- c("Group 1", "Group 2", "Group 3", "Group 4")
+        }
+        
+        #  Only presenting means for 5 groups per variable
+        else if(input$n_groups == 5){
+          mat <- matrix(nrow = 5, ncol = 5, data = 0)
+          colnames(mat) <- c("Group 1", "Group 2", "Group 3", "Group 4", "Group 5")
+          rownames(mat) <- c("Group 1", "Group 2", "Group 3", "Group 4", "Group 5")
+        }
+        
+
+        return(mat)
+      })
+
       output$means_factorial_anova <- renderUI(
-        div(
-          fluidRow(
-            column(width = 12, align = "center",
-                          HTML("<b> Variable 1 </b> "))),
-          fluidRow(
-            column(width = 12/input$n_groups,
-                          if(input$n_groups %in% c(2, 3)){
-                            list(HTML("<b> Check </b>"),
-                                 mean_slider_UI(id = "var_1_group_1", label = "Variable 1 Group 1"),
-                                 mean_slider_UI(id = "var_1_group_2", label = "Variable 1 Group 2")
-                            )
-                            
-                          },
-                          if(input$n_groups == 3){
-                            mean_slider_UI(id = "var_1_group_3", label = "Variable 1 Group 3")
-                          }
-          ),
-          column(width = 12/input$n_groups)
-          )
+        fluidRow(
+          column(width = 1,
+                 # DEBUG: rotate 90 degrees so it is vertical using CSS styling
+                 HTML("<br><br><br> <b> Var 2 </b>")
+                 ),
+               column(width = 11,
+         matrixInput(inputId = "factorial_matrix",
+                     class = "numeric",
+                     value = mat(),
+                     rows = list(names = TRUE),
+                     cols = list(names = TRUE))
+               )
         )
-      )
-      
-      # output$var_2_groups <- renderUI(
-      #   column(width = 6,
-      #          mean_numeric_UI(id = "var_2_group_1", label = "Variable 2 Group 1"),
-      #          mean_numeric_UI(id = "var_2_group_2", label = "Variable 2 Group 2")
-      #   )
-      # )
-      
+         
+        # div(
+        #   fluidRow(
+        #     column(width = 12, align = "center",
+        #                   HTML("<b> Variable 1 </b> "))),
+        #   fluidRow(
+        #     column(width = 1,
+        #            # DEBUG: rotate 90 degrees so it is vertical using CSS styling 
+        #            HTML("V2")),
+        #     column(width = 1, 
+        #            helpText(HTML("<br> <br> G1"))),
+        #     column(width = 12/input$n_groups-1,
+        #            HTML("<b> Group 1 </b>"),
+        #                   if(input$n_groups %in% c(2, 3)){
+        #                     list(
+        #                       mean_slider_UI(id = "Var1Group1_Var2Group1", label = ""),
+        #                       mean_slider_UI(id = "var_1_group_2", label = "Variable 1 Group 2")
+        #                     )
+        #                     
+        #                   },
+        #                   if(input$n_groups == 3){
+        #                     mean_slider_UI(id = "var_1_group_3", label = "Variable 1 Group 3")
+        #                   }
+        #   ),
+        #   column(width = 12/input$n_groups,
+        #          HTML("<b> Group 2 </b>"))
+        #   )
+        # )
+       )
+
       return(
         list(predictor_type = reactive(input$predictor_type),
              n_groups = reactive(input$n_groups),

@@ -31,6 +31,7 @@
 library(shiny)
 library(shinydashboard)
 library(shinyBS)
+library(shinyMatrix) # matrix input
 
 # Other relevant libraries
 library(tidyverse)
