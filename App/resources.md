@@ -12,6 +12,8 @@ Have R or stats piqued your interest and want to learn more? Look no further! Be
 
 #### Books 
 - [R for Data Science](https://r4ds.had.co.nz/) - a free online book created by Hadley Wickham, the chief Scientist at RStudio. 
+- [Hands-on Machine Learning with R](https://bradleyboehmke.github.io/HOML/linear-regression.html) - a free online book on Machine learning, including many of the topics covered in ADDA.
+- Faraway, Julian J. 2016b. Linear Models with R. Chapman; Hall/CRC.
 
 ### Statistics Resources
 
