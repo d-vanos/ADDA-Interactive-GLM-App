@@ -58,10 +58,10 @@ shinyUI(
                             fluidRow(
                               column(width = 4,
                                      
-                                     box(title = "Checking stuff",
-                                         width = NULL,
-                                         debug_UI(id = "debug")
-                                         ),
+                                     # box(title = "Checking stuff",
+                                     #     width = NULL,
+                                     #     debug_UI(id = "debug")
+                                     #     ),
                                      
                                      box(title = "Parameters",
                                          width = NULL,

@@ -173,14 +173,18 @@ parameters_UI <- function(id) {
       HTML("<b> Means <br>
            <center> Variable 1 </center> </b>"),
       
-      uiOutput(ns("means_factorial_anova"))
+      matrixInput(inputId = ns("factorial_matrix_check"),
+                  class = "numeric",
+                  value = matrix(nrow = 2, ncol = 2, data = 0),
+                  rows = list(names = TRUE),
+                  cols = list(names = TRUE)),
+
+      uiOutput(ns("factorial_matrix"))
     )
     
   )
 }
 
-matrix(nrow = 3, ncol = 3, data = 0) %>% 
-  colnames(.) 
 # TO WORK ON: returning multiple reactive values
 parameters_server <- function(id) {
   moduleServer(
@@ -220,15 +224,16 @@ parameters_server <- function(id) {
 
         return(mat)
       })
+      
 
-      output$means_factorial_anova <- renderUI(
+      output$factorial_matrix <- renderUI(
         fluidRow(
           column(width = 1,
                  # DEBUG: rotate 90 degrees so it is vertical using CSS styling
                  HTML("<br><br><br> <b> Var 2 </b>")
                  ),
                column(width = 11,
-         matrixInput(inputId = "factorial_matrix",
+         matrixInput(inputId = "factorial_means",
                      class = "numeric",
                      value = mat(),
                      rows = list(names = TRUE),
@@ -282,7 +287,8 @@ parameters_server <- function(id) {
              mean_2 = mean_slider_server(id = "mean_2"),
              mean_3 = mean_slider_server(id = "mean_3"),
              mean_4 = mean_slider_server(id = "mean_4"),
-             mean_5 = mean_slider_server(id = "mean_5")
+             mean_5 = mean_slider_server(id = "mean_5"),
+             factorial_means = reactive(input$factorial_means)
              )
         )
     }

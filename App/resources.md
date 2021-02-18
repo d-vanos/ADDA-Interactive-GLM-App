@@ -22,5 +22,5 @@ Have R or stats piqued your interest and want to learn more? Look no further! Be
 
 #### Books  
 - Gelman, A., Hill, J., & Vehtari, A. (2020). Regression and Other Stories (Analytical Methods for Social Research). Cambridge: Cambridge University Press. doi:10.1017/9781139161879 
-
+- Faraway, Julian J. 2016a. Extending the Linear Model with R: Generalized Linear, Mixed Effects and Nonparametric Regression Models. Vol. 124. CRC press.
 

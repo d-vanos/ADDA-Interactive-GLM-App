@@ -12,7 +12,10 @@ debug_UI <- function(id) {
     uiOutput(ns("means")),
     textOutput(ns("predictor_type")),
     textOutput(ns("mean")),
-    mean_slider_UI(id = ns("mean_0"), label = "Checking dem means")
+    mean_slider_UI(id = ns("mean_0"), label = "Checking dem means"),
+    textOutput(ns("factorial_anova1")),
+    tableOutput(ns("factorial_anova2")),
+    #dataTableOutput(ns("check"))
     
   )
 }
@@ -59,6 +62,19 @@ debug_server <- function(id, parameters){
       output$mean <- renderText({
         paste0("Mean_0 mean: ", mean_0())
       })
+      
+      output$factorial_anova1 <- renderText({
+        class(parameters$factorial_means())
+      })
+      
+      output$factorial_anova2 <- renderTable({
+        parameters$factorial_means()
+      })
+      
+      # output$check <- renderDataTable({
+      #   as.data.frame(c(1, 2))
+      # })
     }
   )
 }
+

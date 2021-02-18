@@ -31,10 +31,22 @@ one_way_ANOVA <- HTML("One-way ANOVA: ANOVA stands for Analysis of Variance, and
 factorial_ANOVA <- HTML("Factorial ANOVA: A factorial ANOVA is ____
                         It is used when you look at the effects of more than one factor together
                         It gives us information about their dependence or independence in the same experiment.")
+
+moderation <- ""
+
 logistic_regression <- HTML("Logistic Regression: This is also a type of regression analysis.
 With logistic regression
                             It predicts a binary outcomes based on a set of independent variables.
                             A binary outcome is when there are only two possible outcomes - ")
+
+ANCOVA <- ""
+
+MANOVA <- ""
+
+MLM <- ""
+
+Loglinear <- ""
+
 # put in the other models!!
 other <- HTML("No description has been created for this type of model. Keep an eye out, as this might appear soon! ", 
               "&#x1F440") # this HTML entity creates an emoji hehe
