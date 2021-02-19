@@ -29,6 +29,9 @@ shinyServer(function(input, output, session) {
   #### Outputs ####
   ####---------####
   
+  # Equation info
+  equation_info_server(id = "equation_info", predictor_type = parameters$predictor_type, n_groups = parameters$n_groups, outcome_type = parameters$outcome_type)
+  
   # Model info
   model_info_server(id = "model_info", predictor_type = parameters$predictor_type, n_groups = parameters$n_groups, outcome_type = parameters$outcome_type)
   

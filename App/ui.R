@@ -77,7 +77,8 @@ shinyUI(
                                      
                                      box(title = "Equation",
                                          width = NULL,
-                                         HTML("Equation to go here.")),
+                                         equation_info_UI(id = "equation_info")
+                                         ),
                                      
                                      box(title = "Model Info",
                                          width = NULL,

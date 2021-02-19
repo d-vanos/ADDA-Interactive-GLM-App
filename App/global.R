@@ -59,6 +59,7 @@ source("model_info.R")
 source("display_data.R")
 source("debug.R")
 source("means.R")
+source("equation_info.R")
 
 
 
