@@ -14,7 +14,10 @@ generate_data_server <- function(id, parameters){ #,mean_server
     id,
     function(input, output, session) {
       
-      # Generate x axis 
+      ####-----------------####
+      #### Generate x axis ####
+      ####-----------------####
+      
       x_axis <- reactive(
         if(input$predictor_type == "Categorical"){
           
@@ -33,7 +36,10 @@ generate_data_server <- function(id, parameters){ #,mean_server
         }
       )
       
-      # Generate y axis 
+      #####-----------------####
+      ##### Generate y axis ####
+      #####-----------------####
+      
       y_axis <- reactive({
         
         # Categorical IV
@@ -80,8 +86,10 @@ generate_data_server <- function(id, parameters){ #,mean_server
         }
       })
       
+      ####------------------####
+      #### Generate dataset ####
+      ####------------------####
       
-      # Generate regression data
       df <- reactive({
         tibble(
           ID = ID(), 

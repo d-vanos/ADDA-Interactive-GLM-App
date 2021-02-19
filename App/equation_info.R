@@ -12,7 +12,9 @@ linear_regression_equation <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{i} + \\vareps
 
 t_test_equation <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{i} + \\varepsilon$$'
 
-one_way_anova_equation <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{1} + \\beta_{2}x_{2} + ... + \\beta_{k}x_{k} + \\varepsilon$$'
+one_way_anova_equation_3g <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{1} + \\beta_{2}x_{2} + \\varepsilon$$'
+one_way_anova_equation_4g <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{1} + \\beta_{2}x_{2} + \\beta_{3}x_{3} + \\varepsilon$$'
+one_way_anova_equation_5g <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{1} + \\beta_{2}x_{2} + \\beta_{3}x_{3} + \\beta_{4}x_{4} + \\varepsilon$$'
 
 factorial_anova_equation <- 'No equation has been added yet for this type of model. Keep an eye out, as this might appear soon! &#x1F440'
 
@@ -58,7 +60,15 @@ equation_info_server <- function(id, predictor_type, n_groups, outcome_type){
         
         # One-way ANOVA
         else if(predictor_type() == "Categorical" & outcome_type() == "Continuous" & n_groups() > 2){
-          equation <- one_way_anova_equation
+          if(n_groups() == 3){
+            equation <- one_way_anova_equation_3g
+          }
+          else if (n_groups() == 4){
+            equation <- one_way_anova_equation_4g
+          }
+          else if (n_groups() == 5){
+            equation <- one_way_anova_equation_5g
+          }
         }
         
         # Factorial ANOVA

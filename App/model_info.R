@@ -24,7 +24,8 @@ This section can include info on how models relate to one another, and historica
 linear_regression <- HTML("Linear Regression: ")
 t_test <- HTML("T-Test: A t-test
                Beer test!")
-one_way_ANOVA <- HTML("One-way ANOVA: ANOVA stands for Analysis of Variance, and is a test used to analyse the the difference between means of two or more groups. 
+one_way_ANOVA <- HTML("Model Type: One-way ANOVA <br> 
+                       Description: ANOVA stands for Analysis of Variance, and is a test used to analyse the the difference between means of two or more groups. 
                       An ANOVA is used when you have a <b>categorical</b> independent variable, and one quantitative dependent variable. 
                       One-way refers to when you have one indepenedent variable, and two-way when you have two independent variables.
                       ")
