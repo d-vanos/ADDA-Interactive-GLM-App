@@ -40,6 +40,18 @@ shinyServer(function(input, output, session) {
 
   # Print graph
   graph_server(id = "graph", data = data, regression = parameters$show_regression_line, predictor_type = parameters$predictor_type)
+  
+  # Model output
+  model_summary <- reactive({
+    model <- summary(glm(as.formula("y ~ x"), data = data()))
+    return(model)
+  })
+  
+  output$model_output <- renderPrint({
+    print(model_summary())
+  })
+  
+  
 
   ####--------------------------####
   #### Debugging/Checking stuff ####

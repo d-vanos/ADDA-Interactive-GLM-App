@@ -92,7 +92,7 @@ shinyUI(
                                       box(title = "R Model Output",
                                           width = NULL,
                                           textOutput("data"),
-                                          HTML("R Model Output to go here (both the specific model output and the linear regression versions).")
+                                          verbatimTextOutput("model_output")
                                       )
                               )
                               )
