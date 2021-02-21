@@ -22,9 +22,10 @@ display_data_server <- function(id, data){
       
       # Render Table 
       output$dataset <- renderDataTable(
-        data(),
+        round(data(), 2),
         options = list(lengthChange = FALSE,
-                       searching = FALSE)
+                       searching = FALSE,
+                       pageLength = 10)
       )
     }
   )

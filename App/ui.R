@@ -21,16 +21,23 @@ shinyUI(
                 dashboardHeader(title = "Exploring the GLM"),
                 dashboardSidebar(
                   sidebarMenu(
-                    menuItem("Visualising the GLM", tabName = "graph", icon = icon("chart-area"),
-                             startExpanded = TRUE,
-                             menuSubItem("Free Explore", tabName = "free_explore"),
-                             menuSubItem("Start Tutorial", tabName = "start_tutorial")),
-                    menuItem("Learning Exercises", tabName = "exercises", icon = icon("chalkboard-teacher")),
-                    menuItem("R Code", tabName = "code", icon = icon("code"),
-                             startExpanded = TRUE,
-                             menuSubItem("Create R Models", tabName = "r_models"),
-                             menuSubItem("Test Your Understanding", tabName = "test_understanding"),
-                             menuSubItem("Useful Code", tabName = "useful_code")),
+                    menuItem("Visualising the GLM", tabName = "graph", icon = icon("chart-area")),
+                    
+                    #------------------------------------------#
+                    # !!!! WARNING: CURRENTLY NOT VISIBLE !!!! #
+                    #------------------------------------------#
+                             # startExpanded = TRUE,
+                             # menuSubItem("Free Explore", tabName = "free_explore")),
+                             # menuSubItem("Start Tutorial", tabName = "start_tutorial")),
+                    # menuItem("Learning Exercises", tabName = "exercises", icon = icon("chalkboard-teacher")),
+                    # menuItem("R Code", tabName = "code", icon = icon("code"),
+                    #          startExpanded = TRUE,
+                    #          menuSubItem("Create R Models", tabName = "r_models"),
+                    #          menuSubItem("Test Your Understanding", tabName = "test_understanding"),
+                    #          menuSubItem("Useful Code", tabName = "useful_code")),
+                    
+                    #------------------------------------------#
+                    
                     menuItem("Further Resources", tabName = "resources", icon = icon("book-open"))
                   )
                 ),
@@ -46,17 +53,16 @@ shinyUI(
                                             margin: 0 1px;
                                             background: #012a58;
                                             }"))),
-                  
                   tabItems(
                     
                     ####--------------------------####
                     #### Tab: Visualising the GLM ####
                     ####--------------------------####
                     
-                    tabItem(tabName = "free_explore", h2("Visualising General Linear Models"),
+                    tabItem(tabName = "graph", h2("Visualising General Linear Models"),
                             
                             fluidRow(
-                              column(width = 4,
+                              column(width = 3,
                                      
                                      # box(title = "Checking stuff",
                                      #     width = NULL,
@@ -72,28 +78,36 @@ shinyUI(
                                          display_data_UI(id = "dataset")
                                      )
                               ),
-                              
-                              column(width = 8,
+                              column(width = 9,
+                                     
+                                     
                                      
                                      box(title = "Equation",
                                          width = NULL,
                                          equation_info_UI(id = "equation_info")
-                                         ),
-                                     
-                                     box(title = "Model Info",
-                                         width = NULL,
-                                         model_info_UI(id = "model_info")),
+                                     ),
                                      
                                      box(title = "Graph",
                                          width = NULL,
                                          graph_UI(id = "graph")
                                      ),
-                                      
-                                      box(title = "R Model Output",
-                                          width = NULL,
-                                          textOutput("data"),
-                                          verbatimTextOutput("model_output")
-                                      )
+                                     
+                                     fluidRow(
+                                       column(width = 6,
+                                              box(title = "R Model Output",
+                                                  width = NULL,
+                                                  textOutput("data"),
+                                                  verbatimTextOutput("model_output")
+                                              )
+                                       ),
+                                       
+                                       column(width = 6,
+                                              box(title = "Model Info",
+                                                  width = NULL,
+                                                  model_info_UI(id = "model_info"))
+                                       
+                                       )
+                                     )
                               )
                               )
                             ),

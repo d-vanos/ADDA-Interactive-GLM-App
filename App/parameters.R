@@ -12,6 +12,8 @@ parameters_UI <- function(id) {
   # `NS(id)` returns a namespace function, which is saved as `ns` and will be invoked later.
   ns <- NS(id)
   
+  useShinyjs()
+  
   tagList(
     
     # Predictor Type
@@ -30,16 +32,28 @@ parameters_UI <- function(id) {
                    min     = 2, 
                    max     = 5), # Could be higher but that might make it difficult to select means for each group
       
+      #------------------------------------------#
+      # !!!! WARNING: CURRENTLY NOT VISIBLE !!!! #
+      #------------------------------------------#
+      
+      conditionalPanel("input.donotshow == 'donotshow'", 
       numericInput(inputId = ns("n_variables"),
                    label   = "Number of predictor variables",
                    value   = 1, 
                    min     = 1, 
-                   max     = 2),
+                   max     = 2)
+      )
     ),
+    
+    conditionalPanel("input.donotshow == 'donotshow'", 
     radioButtons(inputId = ns("outcome_type"), 
                  label = "Outcome Variable Type",
                  choices = c("Continuous", "Categorical"),
-                 inline = TRUE),
+                 inline = TRUE)
+    ),
+    
+    #------------------------------------------#
+    #------------------------------------------#
     
     conditionalPanel(
       ns = ns,
@@ -68,7 +82,7 @@ parameters_UI <- function(id) {
               title = "If your predictor variable is categorical and you have selected more than one group, this refers to the sample size per group.", 
               placement = "top"),
     
-    helpText(HTML("<b> Variance </b>")),
+    #helpText(HTML("<b> Variance </b>")),
     
     conditionalPanel(
       ns = ns,
@@ -87,6 +101,12 @@ parameters_UI <- function(id) {
       condition = "input.predictor_type == 'Categorical'",
       
       # NOTE: THIS WILL HAVE TO INTERACT WITH THE MEANS SPECIFIED BELOW
+      
+      #------------------------------------------#
+      # !!!! WARNING: CURRENTLY NOT VISIBLE !!!! #
+      #------------------------------------------#
+
+      conditionalPanel("input.donotshow == 'donotshow'", 
       sliderInput(inputId = ns("within_groups_variance"),
                   label   = "Within-groups Variance",
                   min     = 0,
@@ -103,7 +123,11 @@ parameters_UI <- function(id) {
                   min     = 0,
                   max     = 3,
                   value   = 1, 
-                  step    = 0.01),
+                  step    = 0.01)
+      ),
+      
+      #-----------------------------------------#
+      #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
       
       
     ),
@@ -137,6 +161,7 @@ parameters_UI <- function(id) {
       conditionalPanel(
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1",
+        helpText(HTML("<b> Means </b>")),
         mean_slider_UI(id = ns("mean_1"), label = "Group 1"),
         mean_slider_UI(id = ns("mean_2"), label = "Group 2"),
         

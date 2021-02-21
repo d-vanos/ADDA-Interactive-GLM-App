@@ -32,6 +32,7 @@ library(shiny)
 library(shinydashboard)
 library(shinyBS)
 library(shinyMatrix) # matrix input
+library(shinyjs)     # Hide sections of app
 
 # Other relevant libraries
 library(tidyverse)
