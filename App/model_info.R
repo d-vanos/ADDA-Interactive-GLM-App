@@ -21,8 +21,12 @@ This section can include info on how models relate to one another, and historica
 - How it similar to/different from a linear model
 - Assumptions??"
 
-linear_regression <- HTML("Linear Regression: ")
-t_test <- HTML("T-Test: A t-test is used to compare the means between two groups. Is is an application of the general linear model 
+linear_regression <- HTML("Linear Regression: Linear regression is a linear approach 
+                          to modelling the relationship between a scalar response and one (or more) dependent and independent  
+                          variables. When you have one independent variable, it is a simple linear regression. When you have more than one 
+                          independent variable, it is a multiple linear regression.")
+t_test <- HTML("Model Type: T-Test <br>
+Description: A t-test is used to compare the means between two groups. Is is an application of the general linear model 
 as you can treat your groups (a binary variable), as a dummy variable and assign the value of 1 for group A, and 0 for group B.
                The history of the student t-test begins at the Irish Guinness brewery, where 
                scientists were recruited to help ensure quality consistency when producing beer in large 
