@@ -36,7 +36,7 @@ shinyServer(function(input, output, session) {
   model_info_server(id = "model_info", predictor_type = parameters$predictor_type, n_groups = parameters$n_groups, outcome_type = parameters$outcome_type)
   
   # Print dataset 
-  display_data_server(id = "dataset", data = data)
+  display_data_server(id = "dataset", data = data, predictor_type = parameters$predictor_type, n_groups = parameters$n_groups)
 
   # Print graph
   graph_server(id = "graph", data = data, regression = parameters$show_regression_line, predictor_type = parameters$predictor_type)
