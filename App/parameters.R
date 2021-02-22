@@ -82,11 +82,11 @@ parameters_UI <- function(id) {
               title = "If your predictor variable is categorical and you have selected more than one group, this refers to the sample size per group.", 
               placement = "top"),
     
-    #helpText(HTML("<b> Variance </b>")),
-    
     conditionalPanel(
       ns = ns,
       condition = "input.predictor_type == 'Continuous'",
+      
+      helpText(HTML("<b> Variance </b>")),
       
       sliderInput(inputId = ns("variance"),
                   label   = NULL,
@@ -162,8 +162,8 @@ parameters_UI <- function(id) {
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1",
         helpText(HTML("<b> Means </b>")),
-        mean_slider_UI(id = ns("mean_1"), label = "Group 1"),
-        mean_slider_UI(id = ns("mean_2"), label = "Group 2"),
+        mean_slider_UI(id = ns("mean_1"), label = "Group 0"),
+        mean_slider_UI(id = ns("mean_2"), label = "Group 1"),
         
       ),
       
@@ -172,21 +172,21 @@ parameters_UI <- function(id) {
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1 & (input.n_groups == 3 | input.n_groups == 4 | input.n_groups == 5)",
         
-        mean_slider_UI(id = ns("mean_3"), label = "Group 3"),
+        mean_slider_UI(id = ns("mean_3"), label = "Group 2"),
       ),
       
       # 4+ groups
       conditionalPanel(
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1 & (input.n_groups == 4 | input.n_groups == 5)",
-        mean_slider_UI(id = ns("mean_4"), label = "Group 4"),
+        mean_slider_UI(id = ns("mean_4"), label = "Group 3"),
       ),
       
       # 5 groups
       conditionalPanel(
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1 & input.n_groups == 5",
-        mean_slider_UI(id = ns("mean_5"), label = "Group 5"),
+        mean_slider_UI(id = ns("mean_5"), label = "Group 4"),
       ),
     
     # Factorial/2-way ANOVA

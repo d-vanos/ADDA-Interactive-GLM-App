@@ -25,7 +25,6 @@ display_data_server <- function(id, data, predictor_type, n_groups){
         if(predictor_type() == "Continuous"){
           columns <- colnames(data())
           return(columns)
-          
         }
         
         else if(predictor_type() == "Categorical" & n_groups() == 2){
