@@ -43,7 +43,34 @@ shinyServer(function(input, output, session) {
   
   # Model output
   model_summary <- reactive({
-    model <- summary(glm(as.formula("y ~ x"), data = data()))
+    
+    if(parameters$predictor_type() == "Continuous"){
+      predictor_variables <- "x"
+
+    }
+
+    else if(parameters$predictor_type() == "Categorical" & parameters$n_groups() == 2){
+      predictor_variables <- " 1 + group_1"
+
+
+    }
+
+    else if(parameters$predictor_type() == "Categorical" & parameters$n_groups() == 3){
+      predictor_variables <- " 1 + group_1 + group_2"
+
+    }
+
+    else if(parameters$predictor_type() == "Categorical" & parameters$n_groups() == 4){
+      predictor_variables <- " 1 + group_1 + group_2 + group_3"
+
+    }
+
+    else if(parameters$predictor_type() == "Categorical" & parameters$n_groups() == 5){
+      predictor_variables <- " 1 + group_1 + group_2 + group_3 + group_4"
+
+    }
+    
+    model <- summary(glm(as.formula(paste0("y ~", predictor_variables)), data = data()), digits = 3)
     return(model)
   })
   
