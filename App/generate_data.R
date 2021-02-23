@@ -9,7 +9,7 @@
 #
 # ----------------------------------------------------------------- 
 
-generate_data_server <- function(id, parameters){ #,mean_server
+generate_data_server <- function(id, parameters){ 
   moduleServer(
     id,
     function(input, output, session) {
@@ -46,11 +46,11 @@ generate_data_server <- function(id, parameters){ #,mean_server
         if(input$predictor_type == "Categorical"){
           
           # Create groups 
-          group_1 <- mvrnorm(n = input$sample_size, mu = parameters$mean_1(), Sigma = input$within_groups_variance, empirical = TRUE)
-          group_2 <- mvrnorm(n = input$sample_size, mu = parameters$mean_2(), Sigma = input$within_groups_variance, empirical = TRUE)
-          group_3 <- mvrnorm(n = input$sample_size, mu = parameters$mean_3(), Sigma = input$within_groups_variance, empirical = TRUE)
-          group_4 <- mvrnorm(n = input$sample_size, mu = parameters$mean_4(), Sigma = input$within_groups_variance, empirical = TRUE)
-          group_5 <- mvrnorm(n = input$sample_size, mu = parameters$mean_5(), Sigma = input$within_groups_variance, empirical = TRUE)
+          group_1 <- mvrnorm(n = input$sample_size, mu = parameters$mean_0(), Sigma = input$within_groups_variance, empirical = TRUE)
+          group_2 <- mvrnorm(n = input$sample_size, mu = parameters$mean_1(), Sigma = input$within_groups_variance, empirical = TRUE)
+          group_3 <- mvrnorm(n = input$sample_size, mu = parameters$mean_2(), Sigma = input$within_groups_variance, empirical = TRUE)
+          group_4 <- mvrnorm(n = input$sample_size, mu = parameters$mean_3(), Sigma = input$within_groups_variance, empirical = TRUE)
+          group_5 <- mvrnorm(n = input$sample_size, mu = parameters$mean_4(), Sigma = input$within_groups_variance, empirical = TRUE)
           y <- c(group_1, group_2, group_3, group_4, group_5)
           
           # Calculate total sample size

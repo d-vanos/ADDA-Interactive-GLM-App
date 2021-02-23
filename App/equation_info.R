@@ -8,13 +8,13 @@
 
 # GLM Version of Equations 
 
-linear_regression_equation <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{i} + \\varepsilon$$'
+linear_regression_equation <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{i} + \\varepsilon_{i}$$'
 
-t_test_equation <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{i} + \\varepsilon$$'
+t_test_equation <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{i} + \\varepsilon_{i}$$'
 
-one_way_anova_equation_3g <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{1} + \\beta_{2}x_{2} + \\varepsilon$$'
-one_way_anova_equation_4g <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{1} + \\beta_{2}x_{2} + \\beta_{3}x_{3} + \\varepsilon$$'
-one_way_anova_equation_5g <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{1} + \\beta_{2}x_{2} + \\beta_{3}x_{3} + \\beta_{4}x_{4} + \\varepsilon$$'
+one_way_anova_equation_3g <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{1} + \\beta_{2}x_{2} + \\varepsilon_{i}$$'
+one_way_anova_equation_4g <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{1} + \\beta_{2}x_{2} + \\beta_{3}x_{3} + \\varepsilon_{i}$$'
+one_way_anova_equation_5g <- '$$Y_{i} = \\beta_{0} + \\beta_{1}x_{1} + \\beta_{2}x_{2} + \\beta_{3}x_{3} + \\beta_{4}x_{4} + \\varepsilon_{i}$$'
 
 factorial_anova_equation <- 'No equation has been added yet for this type of model. Keep an eye out, as this might appear soon! &#x1F440'
 
@@ -36,48 +36,53 @@ equation_info_UI <- function(id) {
   ns <- NS(id)
   
   tagList(
-    uiOutput(ns("equation_info"))
+    uiOutput(ns("static_equation_info")),
+    uiOutput(ns("reactive_equation_info"))
   )
 }
 
 # Server 
-equation_info_server <- function(id, predictor_type, n_groups, outcome_type){
+equation_info_server <- function(id,  parameters){ 
   moduleServer(
     id,
     function(input, output, session){
       
-      equation_info <- reactive({
+      ####-----------------####
+      #### Static Equation ####
+      ####-----------------####
+      
+      static_equation_info <- reactive({
         
         # Linear regression 
-        if(predictor_type() == "Continuous" & outcome_type() == "Continuous"){
+        if(parameters$predictor_type() == "Continuous" & parameters$outcome_type() == "Continuous"){
           equation <- linear_regression_equation
         }
         
         # T-Test
-        else if(predictor_type() == "Categorical" & outcome_type() == "Continuous" & n_groups() == 2){
+        else if(parameters$predictor_type() == "Categorical" & parameters$outcome_type() == "Continuous" & parameters$n_groups() == 2){
           equation <- t_test_equation
         }
         
         # One-way ANOVA
-        else if(predictor_type() == "Categorical" & outcome_type() == "Continuous" & n_groups() > 2){
-          if(n_groups() == 3){
+        else if(parameters$predictor_type() == "Categorical" & parameters$outcome_type() == "Continuous" & parameters$n_groups() > 2){
+          if(parameters$n_groups() == 3){
             equation <- one_way_anova_equation_3g
           }
-          else if (n_groups() == 4){
+          else if (parameters$n_groups() == 4){
             equation <- one_way_anova_equation_4g
           }
-          else if (n_groups() == 5){
+          else if (parameters$n_groups() == 5){
             equation <- one_way_anova_equation_5g
           }
         }
         
         # Factorial ANOVA
-        else if(predictor_type() == "Categorical"){
+        else if(parameters$predictor_type() == "Categorical"){
           equation <- factorial_anova_equation
         }
         
         # Logistic regression
-        else if(predictor_type() == "Continuous" & outcome_type() == "Categorical"){
+        else if(parameters$predictor_type() == "Continuous" & parameters$outcome_type() == "Categorical"){
           equation <- logistic_regression_equation
         }
         
@@ -90,9 +95,72 @@ equation_info_server <- function(id, predictor_type, n_groups, outcome_type){
       })
       
       
+      output$static_equation_info <- renderUI(
+        withMathJax(HTML(static_equation_info()))
+      )
       
-      output$equation_info <- renderUI(
-        withMathJax(HTML(equation_info()))
+      ####-------------------####
+      #### Reactive Equation ####
+      ####-------------------####
+      
+      reactive_equation_info <- reactive({
+        
+        # Linear regression 
+        if(parameters$predictor_type() == "Continuous" & parameters$outcome_type() == "Continuous"){
+          equation <- paste0("$$Y_{i} = ", parameters$intercept(), "+", parameters$slope(), "x_{i} + \\varepsilon_{i}$$")
+        }
+        
+        # T-Test
+        else if(parameters$predictor_type() == "Categorical" & parameters$outcome_type() == "Continuous" & parameters$n_groups() == 2){
+          equation <- paste0("$$Y_{i} = ", parameters$mean_0(), "+", (parameters$mean_1() - parameters$mean_0()), "x_{i} + \\varepsilon_{i}$$")
+        }
+        
+        # One-way ANOVA
+        else if(parameters$predictor_type() == "Categorical" & parameters$outcome_type() == "Continuous" & parameters$n_groups() > 2){
+          if(parameters$n_groups() == 3){
+            equation <- paste0("$$Y_{i} = ", parameters$mean_0(), "+", 
+                               (parameters$mean_1() - parameters$mean_0()), "x_{1} +",
+                               (parameters$mean_2() - parameters$mean_0()),
+                               "x_{2} + \\varepsilon_{i}$$")
+          }
+          else if (parameters$n_groups() == 4){
+            equation <- paste0("$$Y_{i} = ", parameters$mean_1(), "+", 
+                               (parameters$mean_1() - parameters$mean_0()), "x_{1} +",
+                               (parameters$mean_2() - parameters$mean_0()), "x_{2} +",
+                               (parameters$mean_3() - parameters$mean_0()),
+                               "x_{3} + \\varepsilon_{i}$$")
+          }
+          else if (parameters$n_groups() == 5){
+            equation <- paste0("$$Y_{i} = ", parameters$mean_1(), "+", 
+                               (parameters$mean_1() - parameters$mean_0()), "x_{1} +",
+                               (parameters$mean_2() - parameters$mean_0()), "x_{2} +",
+                               (parameters$mean_3() - parameters$mean_0()), "x_{3} +" ,
+                               (parameters$mean_4() - parameters$mean_0()),
+                               "x_{4} + \\varepsilon_{i}$$")
+          }
+        }
+        
+        # Factorial ANOVA
+        else if(parameters$predictor_type() == "Categorical"){
+          equation <- factorial_anova_equation
+        }
+        
+        # Logistic regression
+        else if(parameters$predictor_type() == "Continuous" & parameters$outcome_type() == "Categorical"){
+          equation <- logistic_regression_equation
+        }
+        
+        else({
+          equation <- other
+        })
+        
+        return(equation)
+        
+        
+      })
+      
+      output$reactive_equation_info <- renderUI(
+        withMathJax(HTML(reactive_equation_info()))
       )
     }
   )

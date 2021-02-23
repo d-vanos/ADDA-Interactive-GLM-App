@@ -21,19 +21,20 @@ This section can include info on how models relate to one another, and historica
 - How it similar to/different from a linear model
 - Assumptions??"
 
-linear_regression <- HTML("Linear Regression: Linear regression is a linear approach 
-                          to modelling the relationship between a scalar response and one (or more) dependent and independent  
-                          variables. When you have one independent variable, it is a simple linear regression. When you have more than one 
-                          independent variable, it is a multiple linear regression.")
-t_test <- HTML("Model Type: T-Test <br>
-Description: A t-test is used to compare the means between two groups. Is is an application of the general linear model 
-as you can treat your groups (a binary variable), as a dummy variable and assign the value of 1 for group A, and 0 for group B.
-               The history of the student t-test begins at the Irish Guinness brewery, where 
-               scientists were recruited to help ensure quality consistency when producing beer in large 
-               quantities. The chemist and mathematician William Sealy Gosset was one of those 
-               recruited. To make decisions about which ingredients to use, he developed statistical methods 
-and the accompanying t-distribution. The Guinness brewery allowed him to publish these findings, 
-but only under a pseudonym, Student.")
+linear_regression <- HTML(
+"<b> Model Type: </b> Linear Regression <br> 
+<b> Description: </b> Linear regression is a linear approach to modelling the relationship between a two or more continuous variables.
+When you have one independent/predictor variable, it is a simple linear regression. When you have more than one independent variable, 
+it is a multiple linear regression.")
+
+t_test <- HTML(
+"<b> Model Type: </b> T-Test <br>
+<b> Description: </b> A t-test is used to compare the means between two groups. Is is an application of the general linear model 
+as you can treat your groups (a binary variable), as a dummy variable and assign the value of 1 for group A, and 0 for group B.<br>
+<b> History: </b> The history of the student t-test begins at the Irish Guinness brewery, where scientists were recruited to help ensure 
+quality consistency when producing beer in large quantities. The chemist and mathematician William Sealy Gosset was one of those 
+recruited. To make decisions about which ingredients to use, he developed statistical methods and the accompanying t-distribution. 
+The Guinness brewery allowed him to publish these findings, but only under a pseudonym, Student.")
 one_way_ANOVA <- HTML("Model Type: One-way ANOVA <br> 
                        Description: ANOVA stands for Analysis of Variance, and is a test used to analyse the the difference between means of two or more groups. 
                       An ANOVA is used when you have a <b>categorical</b> independent variable, and one quantitative dependent variable. 
