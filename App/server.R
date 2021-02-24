@@ -30,25 +30,62 @@ shinyServer(function(input, output, session) {
   ####---------####
   
   # Equation info
-  equation_info_server(id = "equation_info", predictor_type = parameters$predictor_type, n_groups = parameters$n_groups, outcome_type = parameters$outcome_type)
+  equation_info_server(id = "equation_info", parameters = parameters) #predictor_type = parameters$predictor_type, n_groups = parameters$n_groups, outcome_type = parameters$outcome_type)
   
   # Model info
   model_info_server(id = "model_info", predictor_type = parameters$predictor_type, n_groups = parameters$n_groups, outcome_type = parameters$outcome_type)
   
   # Print dataset 
-  display_data_server(id = "dataset", data = data)
+  display_data_server(id = "dataset", data = data, predictor_type = parameters$predictor_type, n_groups = parameters$n_groups)
 
   # Print graph
   graph_server(id = "graph", data = data, regression = parameters$show_regression_line, predictor_type = parameters$predictor_type)
   
   # Model output
   model_summary <- reactive({
-    model <- summary(glm(as.formula("y ~ x"), data = data()))
+    
+    if(parameters$predictor_type() == "Continuous"){
+      predictor_variables <- "x"
+
+    }
+
+    else if(parameters$predictor_type() == "Categorical" & parameters$n_groups() == 2){
+      predictor_variables <- " 1 + group_1"
+
+
+    }
+
+    else if(parameters$predictor_type() == "Categorical" & parameters$n_groups() == 3){
+      predictor_variables <- " 1 + group_1 + group_2"
+
+    }
+
+    else if(parameters$predictor_type() == "Categorical" & parameters$n_groups() == 4){
+      predictor_variables <- " 1 + group_1 + group_2 + group_3"
+
+    }
+
+    else if(parameters$predictor_type() == "Categorical" & parameters$n_groups() == 5){
+      predictor_variables <- " 1 + group_1 + group_2 + group_3 + group_4"
+
+    }
+    
+    model <- glm(as.formula(paste0("y ~", predictor_variables)), data = data())
     return(model)
   })
   
-  output$model_output <- renderPrint({
-    print(model_summary())
+  output$model_output_lm <- renderPrint({
+    summary(model_summary())
+  })
+  
+  output$model_output_anova <- renderPrint({
+    if(parameters$predictor_type() == "Categorical" & parameters$n_groups() == 2){
+      t.test(formula = y ~ x, data = data())
+    }
+      
+    else if(parameters$predictor_type() == "Categorical" & parameters$n_groups() >= 3){
+      summary(aov(formula = y ~ x, data = data()))
+    }
   })
   
   

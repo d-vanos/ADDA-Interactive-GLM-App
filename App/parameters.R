@@ -73,7 +73,7 @@ parameters_UI <- function(id) {
                   label = "Show Regression Line"),
     
     sliderInput(inputId = ns("sample_size"),
-                label   = "Sample Size per Group",
+                label   = "Sample Size",
                 value   = 50, 
                 min     = 1, 
                 max     = 1000),
@@ -82,11 +82,11 @@ parameters_UI <- function(id) {
               title = "If your predictor variable is categorical and you have selected more than one group, this refers to the sample size per group.", 
               placement = "top"),
     
-    #helpText(HTML("<b> Variance </b>")),
-    
     conditionalPanel(
       ns = ns,
       condition = "input.predictor_type == 'Continuous'",
+      
+      helpText(HTML("<p style='color:black;'> <b> Variance (SD) </b> </b>")),
       
       sliderInput(inputId = ns("variance"),
                   label   = NULL,
@@ -100,17 +100,12 @@ parameters_UI <- function(id) {
       ns = ns,
       condition = "input.predictor_type == 'Categorical'",
       
-      # NOTE: THIS WILL HAVE TO INTERACT WITH THE MEANS SPECIFIED BELOW
       
-      #------------------------------------------#
-      # !!!! WARNING: CURRENTLY NOT VISIBLE !!!! #
-      #------------------------------------------#
-
-      conditionalPanel("input.donotshow == 'donotshow'", 
+      
       sliderInput(inputId = ns("within_groups_variance"),
                   label   = "Within-groups Variance",
                   min     = 0,
-                  max     = 10, 
+                  max     = 20, 
                   value   = 1, 
                   step    = 0.01),
       
@@ -118,6 +113,11 @@ parameters_UI <- function(id) {
                 title = "Note: this assumes the within-groups variance is the same for all groups, which may not be the case.", 
                 placement = "top"),
       
+      #------------------------------------------#
+      # !!!! WARNING: CURRENTLY NOT VISIBLE !!!! #
+      #------------------------------------------#
+      # NOTE: THIS WILL HAVE TO INTERACT WITH THE MEANS SPECIFIED BELOW
+      conditionalPanel("input.donotshow == 'donotshow'", 
       sliderInput(inputId = ns("between_groups_variance"),
                   label   = "Between-groups Variance",
                   min     = 0,
@@ -161,9 +161,9 @@ parameters_UI <- function(id) {
       conditionalPanel(
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1",
-        helpText(HTML("<b> Means </b>")),
+        helpText(HTML("<p style='color:black;'><b> Means </b></p>")),
+        mean_slider_UI(id = ns("mean_0"), label = "Group 0"),
         mean_slider_UI(id = ns("mean_1"), label = "Group 1"),
-        mean_slider_UI(id = ns("mean_2"), label = "Group 2"),
         
       ),
       
@@ -172,21 +172,21 @@ parameters_UI <- function(id) {
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1 & (input.n_groups == 3 | input.n_groups == 4 | input.n_groups == 5)",
         
-        mean_slider_UI(id = ns("mean_3"), label = "Group 3"),
+        mean_slider_UI(id = ns("mean_2"), label = "Group 2"),
       ),
       
       # 4+ groups
       conditionalPanel(
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1 & (input.n_groups == 4 | input.n_groups == 5)",
-        mean_slider_UI(id = ns("mean_4"), label = "Group 4"),
+        mean_slider_UI(id = ns("mean_3"), label = "Group 3"),
       ),
       
       # 5 groups
       conditionalPanel(
         ns = ns,
         condition = "input.predictor_type == 'Categorical'  & input.n_variables == 1 & input.n_groups == 5",
-        mean_slider_UI(id = ns("mean_5"), label = "Group 5"),
+        mean_slider_UI(id = ns("mean_4"), label = "Group 4"),
       ),
     
     # Factorial/2-way ANOVA
@@ -308,11 +308,11 @@ parameters_server <- function(id) {
              between_groups_variance = reactive(input$between_groups_variance),
              intercept = reactive(input$intercept),
              slope = reactive(input$slope),
+             mean_0 = mean_slider_server(id = "mean_0"),
              mean_1 = mean_slider_server(id = "mean_1"),
              mean_2 = mean_slider_server(id = "mean_2"),
              mean_3 = mean_slider_server(id = "mean_3"),
              mean_4 = mean_slider_server(id = "mean_4"),
-             mean_5 = mean_slider_server(id = "mean_5"),
              factorial_means = reactive(input$factorial_means)
              )
         )

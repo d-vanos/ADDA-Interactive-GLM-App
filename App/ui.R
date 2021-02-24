@@ -72,15 +72,9 @@ shinyUI(
                                      box(title = "Parameters",
                                          width = NULL,
                                          parameters_UI(id = "parameters") # Note: this needs to match up to the server
-                                     ),
-                                     box(title = "Dataset",
-                                         width = NULL,
-                                         display_data_UI(id = "dataset")
                                      )
                               ),
                               column(width = 9,
-                                     
-                                     
                                      
                                      box(title = "Equation",
                                          width = NULL,
@@ -97,7 +91,9 @@ shinyUI(
                                               box(title = "R Model Output",
                                                   width = NULL,
                                                   textOutput("data"),
-                                                  verbatimTextOutput("model_output")
+                                                  verbatimTextOutput("model_output_lm"),
+                                                  verbatimTextOutput("model_output_anova")
+                                                  
                                               )
                                        ),
                                        
@@ -107,6 +103,11 @@ shinyUI(
                                                   model_info_UI(id = "model_info"))
                                        
                                        )
+                                     ),
+                                     
+                                     box(title = "Dataset",
+                                         width = NULL,
+                                         display_data_UI(id = "dataset")
                                      )
                               )
                               )

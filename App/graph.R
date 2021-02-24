@@ -46,14 +46,14 @@ graph_server <- function(id, data, regression, predictor_type){
         # Add a regression line if this is selected, else return the original graph
         if(regression() == TRUE){
             graph <- graph + 
-            stat_smooth(method = "lm")
+            stat_smooth(method = "lm", se = FALSE)
             
         }
         
         # Add x range
         if(predictor_type() == 'Continuous'){
           graph <- graph +
-            xlim(-7, 7)
+            xlim(-4, 4)
           
         }
         else if (predictor_type() == 'Categorical'){

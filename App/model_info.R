@@ -21,6 +21,7 @@ This section can include info on how models relate to one another, and historica
 - How it similar to/different from a linear model
 - Assumptions??"
 
+
 linear_regression <- HTML("Linear Regression: Linear regression is a linear approach 
                           to modelling the relationship between a scalar response and one (or more) dependent and independent  
                           variables. When you have one independent variable, it is a simple linear regression. When you have more than one 
@@ -36,12 +37,8 @@ as you can treat your groups (a binary variable), as a dummy variable and assign
 and the accompanying t-distribution. The Guinness brewery allowed him to publish these findings, 
 but only under a pseudonym, Student.")
 
-one_way_ANOVA <- HTML("<b>Model Type:</b> One-way ANOVA <br> 
-                       <b>Description:</b> ANOVA stands for Analysis of Variance, and is a test used to analyse the the difference between means of two or more groups. 
-                      An ANOVA is used when you have a <b>categorical</b> independent variable, and one quantitative dependent variable. 
-                      One-way refers to when you have one indepenedent variable, and two-way when you have two independent variables. <br>
-                      <b>History:</b> 
-                      ")
+
+
 factorial_ANOVA <- HTML("<b>Model Type:</b> Factorial ANOVA <br>
                         <b>Description:</b> A factorial ANOVA is ____
                         It is used when you look at the effects of more than one factor together
