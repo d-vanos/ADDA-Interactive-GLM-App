@@ -124,14 +124,14 @@ equation_info_server <- function(id,  parameters){
                                "x_{2} + \\varepsilon_{i}$$")
           }
           else if (parameters$n_groups() == 4){
-            equation <- paste0("$$Y_{i} = ", parameters$mean_1(), "+", 
+            equation <- paste0("$$Y_{i} = ", parameters$mean_0(), "+", 
                                (parameters$mean_1() - parameters$mean_0()), "x_{1} +",
                                (parameters$mean_2() - parameters$mean_0()), "x_{2} +",
                                (parameters$mean_3() - parameters$mean_0()),
                                "x_{3} + \\varepsilon_{i}$$")
           }
           else if (parameters$n_groups() == 5){
-            equation <- paste0("$$Y_{i} = ", parameters$mean_1(), "+", 
+            equation <- paste0("$$Y_{i} = ", parameters$mean_0(), "+", 
                                (parameters$mean_1() - parameters$mean_0()), "x_{1} +",
                                (parameters$mean_2() - parameters$mean_0()), "x_{2} +",
                                (parameters$mean_3() - parameters$mean_0()), "x_{3} +" ,
