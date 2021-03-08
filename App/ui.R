@@ -90,10 +90,8 @@ shinyUI(
                                        column(width = 6,
                                               box(title = "R Model Output",
                                                   width = NULL,
-                                                  textOutput("data"),
-                                                  verbatimTextOutput("model_output_lm"),
-                                                  verbatimTextOutput("model_output_anova")
-                                                  
+                                                  R_model_output_UI(id = "R_model_output")
+
                                               )
                                        ),
                                        
