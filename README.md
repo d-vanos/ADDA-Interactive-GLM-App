@@ -8,7 +8,7 @@ statistical concepts related to the General Linear Model (i.e., linear
 regression, ANOVA, ANCOVA, MANOVA, moderation, mediation, logistic
 regression, and multilevel modelling).
 
-## App
+### App
 
 The latest stable version of the app can be found [here](https://adda.shinyapps.io/Exploring-the-GLM/).
 
