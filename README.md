@@ -10,7 +10,7 @@ regression, and multilevel modelling).
 
 ## App
 
-The latest stable version of the app can be found [here](https://adda.shinyapps.io/Exploring-the-GLM/)
+The latest stable version of the app can be found [here](https://adda.shinyapps.io/Exploring-the-GLM/).
 
 ### Prototype
 
