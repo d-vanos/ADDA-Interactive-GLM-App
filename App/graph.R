@@ -28,7 +28,7 @@ graph_UI <- function(id) {
 }
 
 # Server 
-graph_server <- function(id, data, regression, predictor_type){
+graph_server <- function(id, data, regression, predictor_type, n_variables){
   moduleServer(
     id,
     function(input, output, session){
@@ -60,6 +60,13 @@ graph_server <- function(id, data, regression, predictor_type){
           graph <- graph +
             xlim(0, 4)
           
+          if(n_variables() == 2){
+            graph <- graph +
+              geom_point(aes(colour = data()$var_2), show.legend = FALSE) + 
+              scale_color_gradient() 
+              
+          }
+
 
         }
         

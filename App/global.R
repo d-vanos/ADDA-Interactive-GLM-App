@@ -33,6 +33,7 @@ library(shinydashboard)
 library(shinyBS)
 library(shinyMatrix) # matrix input
 library(shinyjs)     # Hide sections of app
+library(rhandsontable)
 
 # Other relevant libraries
 library(tidyverse)
@@ -46,10 +47,11 @@ library(knitr) # To knit Rmarkdown files
 
 
 
+
 # -------------------------------------------------------------------------
 #
 #
-# Load scripts for the UI 
+# Load scripts
 # 
 #
 # -------------------------------------------------------------------------
@@ -62,17 +64,6 @@ source("debug.R")
 source("means.R")
 source("equation_info.R")
 source("R_model_output.R")
-
-
-
-# -------------------------------------------------------------------------
-#
-#
-# Load scripts for the server 
-# 
-#
-# -------------------------------------------------------------------------
-
 source("generate_data.R") # Generate the data for the table and graph
 source("graph.R") # Create the graph 
 

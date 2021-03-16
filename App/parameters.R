@@ -32,18 +32,17 @@ parameters_UI <- function(id) {
                    min     = 2, 
                    max     = 5), # Could be higher but that might make it difficult to select means for each group
       
-      #------------------------------------------#
-      # !!!! WARNING: CURRENTLY NOT VISIBLE !!!! #
-      #------------------------------------------#
-      
-      conditionalPanel("input.donotshow == 'donotshow'", 
+
       numericInput(inputId = ns("n_variables"),
                    label   = "Number of predictor variables",
                    value   = 1, 
                    min     = 1, 
                    max     = 2)
-      )
     ),
+    
+    #------------------------------------------#
+    # !!!! WARNING: CURRENTLY NOT VISIBLE !!!! #
+    #------------------------------------------#
     
     conditionalPanel("input.donotshow == 'donotshow'", 
     radioButtons(inputId = ns("outcome_type"), 
@@ -194,17 +193,15 @@ parameters_UI <- function(id) {
       ns = ns,
       condition = "input.predictor_type == 'Categorical'  & input.n_variables == 2",
       
-      
+      column(width = 12,
       HTML("<b> Means <br>
-           <center> Variable 1 </center> </b>"),
+           <center> Variable 1 </center> </b>")
+      ),
       
-      matrixInput(inputId = ns("factorial_matrix_check"),
-                  class = "numeric",
-                  value = matrix(nrow = 2, ncol = 2, data = 0),
-                  rows = list(names = TRUE),
-                  cols = list(names = TRUE)),
-
-      uiOutput(ns("factorial_matrix"))
+      #uiOutput(ns("factorial_matrix")),
+      rHandsontableOutput(ns("factorial_table")),
+      tableOutput(ns("table"))
+      
     )
     
   )
@@ -216,85 +213,34 @@ parameters_server <- function(id) {
     id,
     function(input, output, session){
       
-      mat <- reactive({
-        # Make the column size for factorial ANOVA depend on the number of groups selected
-        # Only presenting means for 2 groups per variable 
-        if(input$n_groups == 2){
-          mat <- matrix(nrow = 2, ncol = 2, data = 0)
-          colnames(mat) <- c("Group 1", "Group 2")
-          rownames(mat) <- c("Group 1", "Group 2")
-        }
 
-        #  Only presenting means for 3 groups per variable
-        else if(input$n_groups == 3){
-          mat <- matrix(nrow = 3, ncol = 3, data = 0)
-          colnames(mat) <- c("Group 1", "Group 2", "Group 3")
-          rownames(mat) <- c("Group 1", "Group 2", "Group 3")
-        }
+      # Allow user to change inputs 
+      df <- reactive({
+        anova_mat <- matrix(nrow = 2, ncol = input$n_groups, data = 0)
+        colnames(anova_mat) <- paste(rep("Group", input$n_groups), 1:input$n_groups) 
+        rownames(anova_mat) <- c("Group 1", "Group 2")
         
-        #  Only presenting means for 4 groups per variable
-        else if(input$n_groups == 4){
-          mat <- matrix(nrow = 4, ncol = 4, data = 0)
-          colnames(mat) <- c("Group 1", "Group 2", "Group 3", "Group 4")
-          rownames(mat) <- c("Group 1", "Group 2", "Group 3", "Group 4")
-        }
-        
-        #  Only presenting means for 5 groups per variable
-        else if(input$n_groups == 5){
-          mat <- matrix(nrow = 5, ncol = 5, data = 0)
-          colnames(mat) <- c("Group 1", "Group 2", "Group 3", "Group 4", "Group 5")
-          rownames(mat) <- c("Group 1", "Group 2", "Group 3", "Group 4", "Group 5")
-        }
-        
-
-        return(mat)
+        df <- as.data.frame(x = anova_mat)
+        return(df)
       })
       
+      output$factorial_table <- renderRHandsontable({
+        rhandsontable(df())
+      })
+      
+      # Save table output
+      factorial_table <- reactive({
+        if(!is.null(input$factorial_table)){
+          hot_to_r(input$factorial_table)
+        }
+      })
+      
+      # Print table output 
+      output$table <- renderTable({
+        as.data.frame(factorial_table())
+      })
 
-      output$factorial_matrix <- renderUI(
-        fluidRow(
-          column(width = 1,
-                 # DEBUG: rotate 90 degrees so it is vertical using CSS styling
-                 HTML("<br><br><br> <b> Var 2 </b>")
-                 ),
-               column(width = 11,
-         matrixInput(inputId = "factorial_means",
-                     class = "numeric",
-                     value = mat(),
-                     rows = list(names = TRUE),
-                     cols = list(names = TRUE))
-               )
-        )
          
-        # div(
-        #   fluidRow(
-        #     column(width = 12, align = "center",
-        #                   HTML("<b> Variable 1 </b> "))),
-        #   fluidRow(
-        #     column(width = 1,
-        #            # DEBUG: rotate 90 degrees so it is vertical using CSS styling 
-        #            HTML("V2")),
-        #     column(width = 1, 
-        #            helpText(HTML("<br> <br> G1"))),
-        #     column(width = 12/input$n_groups-1,
-        #            HTML("<b> Group 1 </b>"),
-        #                   if(input$n_groups %in% c(2, 3)){
-        #                     list(
-        #                       mean_slider_UI(id = "Var1Group1_Var2Group1", label = ""),
-        #                       mean_slider_UI(id = "var_1_group_2", label = "Variable 1 Group 2")
-        #                     )
-        #                     
-        #                   },
-        #                   if(input$n_groups == 3){
-        #                     mean_slider_UI(id = "var_1_group_3", label = "Variable 1 Group 3")
-        #                   }
-        #   ),
-        #   column(width = 12/input$n_groups,
-        #          HTML("<b> Group 2 </b>"))
-        #   )
-        # )
-       )
-
       return(
         list(predictor_type = reactive(input$predictor_type),
              n_groups = reactive(input$n_groups),
@@ -313,7 +259,7 @@ parameters_server <- function(id) {
              mean_2 = mean_slider_server(id = "mean_2"),
              mean_3 = mean_slider_server(id = "mean_3"),
              mean_4 = mean_slider_server(id = "mean_4"),
-             factorial_means = reactive(input$factorial_means)
+             factorial_anova = reactive(input$factorial_table)
              )
         )
     }
