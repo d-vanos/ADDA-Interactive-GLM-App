@@ -79,9 +79,8 @@ MLM <- HTML("<b>Model Type:</b> MLM <br>
 of restaurant performance where there are measures for individual restaurants as well as measures for cities in which the restaurants are grouped. MLMs can also extend to non-linear models.<br>
             <b>History:</b> MLM has become more popular with improvements in computing software and power.")
 
-Loglinear <- HTML("<b>Model Type:</b> Loglinear <br>
-                  <b>Description:</b>   <br>
-                  <b>History:</b> ")
+loglinear_regression <- HTML("<b>Model Type:</b> Loglinear regression <br>
+                  <b>Description:</b> Loglinear regression is usually a Poisson regression used to model count data. It is often applied to multi-way contingency tables.")
 
 # put in the other models!!
 other <- HTML("No description has been created for this type of model. Keep an eye out, as this might appear soon! ", 
