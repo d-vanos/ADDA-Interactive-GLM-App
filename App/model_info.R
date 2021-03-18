@@ -54,25 +54,28 @@ is a special case of the Factorial ANOVA. The simplest factorial design contains
                         <b>History:</b> Factorial designs in experiments started being used in the 1800s by the Rothamsted Experimental Station (specifically Lawes and Gilbert).")
 
 moderation <- HTML("<b>Model Type:</b> Moderation <br>
-                   <b> Description:</b>  <br>
-                   <b>History:</b> ")
+                   <b> Description:</b> Moderation refers to when the relationship between two variables varies depending on a third variable. Moderator variables function as independent variables which 
+modify the relationship between X and Y. In other words, the strength and direction of the relationship between X and Y are influenced by the value of your third, moderating variable. Moderation analyses 
+look at interaction effects.s")
 
 logistic_regression <- HTML("<b>Model Type:</b> Logistic Regression <br>
-                            <b>Description:</b> This is also a type of regression analysis. 
-It predicts a binary outcomes based on a set of independent variables. 
-                            A binary outcome is when there are only two possible outcomes -  <br>
-                            <b>History:</b> ")
+                            <b>Decription:</b> This is also a type of regression analysis. It predicts a binary outcome based on a set of independent variables. 
+                            A binary outcome is when there are only two possible outcomes - the event happens or it doesn't happen (1 or 0). If your dependent variable is dichotomous, 
+or categorical, you could use a logistic regression. Examples of dichotomous output may include yes or no, 1 or 2 (of two groups), pass or fail, etc. The independent variables could be 
+continuous, ordinal, or nominal.")
 
 ANCOVA <- HTML("<b>Model Type:</b> ANCOVA <br>
-               <b>Description:</b> ANCOVA stands for   <br>
-               <b>History:</b>  ")
+               <b>Description:</b> ANCOVA stands for Analysis of Covariance. It is similar to an ANOVA in that it is used to determine whether there is a difference between 
+               three or more categorical predictor variables. However, it also statistically controls for one or more covariates, which allows us to better understand how the factor affects the outcome variable. 
+               In this case, the covariate(s) could be thought of as nuisance variables.")
 
 MANOVA <- HTML("<b>Model Type:</b> MANOVA <br>
-               <b>Description:</b> MANOVA stands for   <br>
-               <b>History:</b>  ")
+               <b>Description:</b> MANOVA stands for Multivariate Analysis of Variance. MANOVA is a generalised form of the ANOVA but it has two or more outcome variables and uses 
+the covariance between outcome variables in testing the statistical significance of the mean differences. It can be one-way, with one factor and two or more outcome variables. It can also 
+be two-way, with two factors and two or more outcome variables.")
 
 MLM <- HTML("<b>Model Type:</b> MLM <br>
-            <b>Description:</b> MLM stands for multi-level modeling.  <br>
+            <b>Description:</b> MLM stands for multi-level modeling. <br>
             <b>History:</b> ")
 
 Loglinear <- HTML("<b>Model Type:</b> Loglinear <br>
