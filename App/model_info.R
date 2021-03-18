@@ -75,8 +75,9 @@ the covariance between outcome variables in testing the statistical significance
 be two-way, with two factors and two or more outcome variables.")
 
 MLM <- HTML("<b>Model Type:</b> MLM <br>
-            <b>Description:</b> MLM stands for multi-level modeling. <br>
-            <b>History:</b> ")
+            <b>Description:</b> MLM stands for multi-level modeling. MLMs are used in designs where data is organised into different levels. For example, you could have a model 
+of restaurant performance where there are measures for individual restaurants as well as measures for cities in which the restaurants are grouped. MLMs can also extend to non-linear models.<br>
+            <b>History:</b> MLM has become more popular with improvements in computing software and power.")
 
 Loglinear <- HTML("<b>Model Type:</b> Loglinear <br>
                   <b>Description:</b>   <br>
